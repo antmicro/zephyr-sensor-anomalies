@@ -1,0 +1,22 @@
+menu "Zephyr"
+source "Kconfig.zephyr"
+endmenu
+
+config CSV_READER_DELAY
+    int "Delay between sensor reads"
+    default 200
+    depends on PROVIDER_LIB
+
+config CSV_READER_SAMPLE_COUNT
+    int "Number of sensor samples to collect (0 for unlimited)"
+    default 0
+    depends on PROVIDER_LIB
+
+config CSV_READER_MAX_ROW_SIZE
+    int "Max sum of channels in available sensors"
+    default 128
+    depends on PROVIDER_LIB
+
+module = APP
+module-str = app
+source "subsys/logging/Kconfig.template.log_config"

@@ -1,0 +1,2 @@
+config PROVIDER_LIB
+    bool "Support for provider lib"

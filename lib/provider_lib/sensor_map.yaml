@@ -1,0 +1,9 @@
+- st_lis2ds12:
+  - ACCEL_X
+  - ACCEL_Y
+  - ACCEL_Z
+
+- st_adi_axl345:
+  - ACCEL_X
+  - ACCEL_Y
+  - ACCEL_Z
