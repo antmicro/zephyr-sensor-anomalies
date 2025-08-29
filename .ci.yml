@@ -6,6 +6,20 @@ stages:
     - main
     - merge_requests
 
+pre-commit:
+  <<: *common_only
+  stage: test
+  image: "debian:trixie"
+  before_get_sources:
+    - apt update -qqy
+    - apt install -qqy curl git clang-format-19
+  before_script:
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+  script:
+    - source $HOME/.local/bin/env
+    - ln /usr/bin/clang-format-19 /usr/bin/clang-format
+    - uvx pre-commit run --all-files
+
 tuttest:
   <<: *common_only
   stage: test
