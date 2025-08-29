@@ -1,0 +1,49 @@
+stages:
+- test
+
+.common_only: &common_only
+  only:
+    - main
+    - merge_requests
+
+tuttest:
+  <<: *common_only
+  stage: test
+  image: "debian:trixie"
+  before_get_sources:
+    - apt update -qqy
+    - apt install -qqy --no-install-recommends git cmake ninja-build gperf
+      ccache dfu-util device-tree-compiler wget python3-dev python3-venv python3-tk
+      xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1 curl libicu-dev
+  script:
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+    - source $HOME/.local/bin/env
+    - uv venv -p 3.11 --seed
+    - source .venv/bin/activate
+    - uvx git+https://github.com/antmicro/tuttest README.md | bash -
+
+twister:
+  <<: *common_only
+  stage: test
+  image: "zephyrprojectrtos/ci:v0.28.2"
+  before_get_sources:
+    - apt update -qqy
+    - apt install -qqy curl git
+  before_script:
+    - west init -l .
+    - west update
+    - west patch apply
+    - west zephyr-export
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+    - source $HOME/.local/bin/env
+    - ./scripts/prepare_renode.sh
+    - uv pip install -r renode_latest/tests/requirements.txt
+  script:
+    - source $HOME/.local/bin/env
+    - export PATH=$PATH:/opt/toolchains/zephyr-sdk-0.17.2/cmake/
+    - source ./scripts/activate_renode.sh
+    - west twister -j1 -W -T samples
+  artifacts:
+    when: always
+    paths:
+      - twister-out

@@ -1,0 +1,10 @@
+sample:
+  name: simple
+common:
+  platform_allow:
+    - stm32f746g_disco
+tests:
+  sample.sensors.robot:
+    harness: robot
+    harness_config:
+      robot_testsuite: sensors.robot

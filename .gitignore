@@ -1,3 +1,4 @@
 /renode_latest
 /.venv
 /build
+/twister-out*

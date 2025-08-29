@@ -46,7 +46,7 @@ int main()
         uint32_t i = 0;
         while (1)
         {
-            printf("%f", buffer[i]);
+            printf("%lf", (double)buffer[i]);
             if (++i < pr.dst_N)
             {
                 putchar(',');
