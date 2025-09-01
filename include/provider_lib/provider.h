@@ -5,8 +5,6 @@
 
 #include <zephyr/drivers/sensor.h>
 
-#define MAX_PROVIDER_COUNT 10
-
 enum provider_status
 {
     PROVIDER_STATUS_OK = 0,
@@ -27,7 +25,7 @@ struct provider
 
 struct provider_reader
 {
-    struct provider *ps[MAX_PROVIDER_COUNT];
+    struct provider *ps[CONFIG_MAX_PROVIDER_COUNT];
     uint32_t ps_N;
     uint32_t dst_N;
 };

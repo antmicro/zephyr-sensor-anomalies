@@ -1,2 +1,7 @@
 config PROVIDER_LIB
     bool "Support for provider lib"
+
+config MAX_PROVIDER_COUNT
+    int "Maximum number of providers"
+    default 16
+    depends on PROVIDER_LIB
