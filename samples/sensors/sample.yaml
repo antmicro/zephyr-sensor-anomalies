@@ -1,5 +1,5 @@
 sample:
-  name: simple
+  name: sensors
 common:
   platform_allow:
     - stm32f746g_disco

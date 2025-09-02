@@ -1,0 +1,13 @@
+sample:
+  name: anomaly
+common:
+  platform_allow:
+    - stm32f746g_disco
+tests:
+  sample.anomaly.robot:
+    extra_configs:
+      - CONFIG_ANOMALY_LIB_BACKEND_EMLEARN=y
+      - CONFIG_ANOMALY_LIB_EMLEARN_MODEL_PATH="emlearn_model.gz"
+    harness: robot
+    harness_config:
+      robot_testsuite: anomaly.robot
