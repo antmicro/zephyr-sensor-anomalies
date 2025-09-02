@@ -7,7 +7,7 @@
 
 int provider_reader_register(struct provider_reader *pr, struct provider *p)
 {
-    if (pr->ps_N == CONFIG_MAX_PROVIDER_COUNT)
+    if (pr->ps_N >= CONFIG_MAX_PROVIDER_COUNT)
     {
         return -PROVIDER_STATUS_OOB_ERR;
     }
