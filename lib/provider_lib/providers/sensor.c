@@ -9,7 +9,7 @@ int provider_read_sensor(struct provider *p, float *buf)
     rc = sensor_sample_fetch(info->sensor);
     if (rc)
     {
-        return PROVIDER_STATUS_SAMPLE_FETCH_ERR;
+        return -PROVIDER_STATUS_SAMPLE_FETCH_ERR;
     }
 
     for (uint32_t i = 0; i < p->channels_N; i++)
@@ -17,7 +17,7 @@ int provider_read_sensor(struct provider *p, float *buf)
         rc = sensor_channel_get(info->sensor, p->channels[i], val);
         if (rc)
         {
-            return PROVIDER_STATUS_CHAN_GET_ERR;
+            return -PROVIDER_STATUS_CHAN_GET_ERR;
         }
 
         buf[i] = sensor_value_to_float(val);
