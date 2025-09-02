@@ -17,3 +17,6 @@ manifest:
           - hal_stm32
           - hal_st
 
+    - name: emlearn
+      url: https://github.com/emlearn/emlearn
+      revision: master

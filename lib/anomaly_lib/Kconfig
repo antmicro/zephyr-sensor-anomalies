@@ -1,0 +1,18 @@
+config ANOMALY_LIB
+    bool "Support for anomaly lib"
+
+choice ANOMALY_LIB_BACKEND
+    prompt "Backend used for anomaly detection"
+    depends on ANOMALY_LIB
+    default ANOMALY_LIB_BACKEND_EMLEARN
+
+config ANOMALY_LIB_BACKEND_EMLEARN
+    prompt "emlearn-based backend"
+    bool
+
+endchoice
+
+config ANOMALY_LIB_EMLEARN_MODEL_PATH
+    prompt "emlearn model path"
+    string
+    depends on ANOMALY_LIB_BACKEND_EMLEARN

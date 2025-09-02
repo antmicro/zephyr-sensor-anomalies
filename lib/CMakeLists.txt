@@ -1,1 +1,2 @@
-add_subdirectory(provider_lib)
+add_subdirectory_ifdef(CONFIG_PROVIDER_LIB provider_lib)
+add_subdirectory_ifdef(CONFIG_ANOMALY_LIB anomaly_lib)
