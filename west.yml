@@ -1,22 +1,36 @@
 manifest:
-  self:
-    west-commands: scripts/west-commands.yml
-
   remotes:
     - name: zephyrproject-rtos
       url-base: https://github.com/zephyrproject-rtos
 
+    - name: antmicro
+      url-base: https://github.com/antmicro
+
   projects:
     - name: zephyr
       remote: zephyrproject-rtos
-      revision: main
+      revision: v4.2-branch
       import:
-        name-allowlist:
-          - cmsis_6
-          - hal_adi
-          - hal_stm32
-          - hal_st
+        path-allowlist:
+          - modules/debug/*
+          - modules/hal/*
+          - modules/lib/*
+          - modules/tee/tf-m/*
+
+    # TODO: investigate why adding tflite-micro to above import list does not work
+    - name: tflite-micro
+      remote: zephyrproject-rtos
+      revision: zephyr-v4.1.0
 
     - name: emlearn
       url: https://github.com/emlearn/emlearn
       revision: master
+
+    - name: kenning-zephyr-runtime
+      url: https://github.com/antmicro/kenning-zephyr-runtime/
+      revision: main
+      import:
+        path-allowlist:
+          - dlpack
+          - tvm
+

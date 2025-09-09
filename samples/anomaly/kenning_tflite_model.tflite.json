@@ -1,0 +1,1 @@
+{"input": [{"name": "input_1", "shape": [1, 6], "dtype": "float64"}], "processed_input": [{"name": "serving_default_input_1:0", "shape": [1, 6], "dtype": "float32", "order": 0}], "output": [{"name": "PartitionedCall_1:0", "shape": [1, 4], "dtype": "float32", "order": 0}], "processed_output": [{"name": "class", "shape": [1], "dtype": "int64"}]}

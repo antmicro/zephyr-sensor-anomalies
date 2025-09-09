@@ -50,6 +50,13 @@ int main()
         break;
     }
 
+    status = detector_init();
+    if (status)
+    {
+        printk("Detector init failed: %d\n", status);
+        return -1;
+    }
+
     uint32_t sample_count = 0;
 
     float score;

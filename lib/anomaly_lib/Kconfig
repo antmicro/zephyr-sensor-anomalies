@@ -4,11 +4,21 @@ config ANOMALY_LIB
 choice ANOMALY_LIB_BACKEND
     prompt "Backend used for anomaly detection"
     depends on ANOMALY_LIB
-    default ANOMALY_LIB_BACKEND_EMLEARN
+    default ANOMALY_LIB_BACKEND_NONE
+
+config ANOMALY_LIB_BACKEND_NONE
+    prompt "no backend"
+    bool
 
 config ANOMALY_LIB_BACKEND_EMLEARN
     prompt "emlearn-based backend"
     bool
+    depends on EMLEARN
+
+config ANOMALY_LIB_BACKEND_KENNING
+    prompt "kenning-based backend"
+    bool
+    depends on KENNING_INFERENCE_LIB
 
 endchoice
 

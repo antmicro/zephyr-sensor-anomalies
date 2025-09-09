@@ -1,0 +1,375 @@
+From 3dfa51f2ef9107906832dbd4890071f2c077859e Mon Sep 17 00:00:00 2001
+From: Mikolaj Klikowicz <mklikowicz@antmicro.com>
+Date: Tue, 21 Oct 2025 15:50:13 +0200
+Subject: [PATCH] improvements for external use
+
+---
+ demo_app/iree_embedded_elf.conf             |  3 ++-
+ demo_app/iree_vmvx.conf                     |  2 +-
+ demo_app/tflite.conf                        |  2 +-
+ demo_app/tflite_int8.conf                   |  2 +-
+ demo_app/tvm.conf                           |  2 +-
+ demo_app/tvm_int8.conf                      |  2 +-
+ lib/CMakeLists.txt                          |  2 +-
+ lib/kenning_inference_lib/CMakeLists.txt    |  6 ++----
+ lib/kenning_inference_lib/Kconfig           |  2 +-
+ lib/kenning_inference_lib/cmake/model.cmake | 12 +++++------
+ scripts/ai8x_fetch.py                       | 12 +++++++++++
+ scripts/build_tflite.py                     | 22 +++++++++++++++------
+ scripts/build_tvm.py                        | 12 +++++++++++
+ scripts/gen_increased_memory_overlay.py     |  6 ++++++
+ scripts/io_spec_to_struct.py                | 12 +++++++++++
+ scripts/run_renode.py                       | 12 ++++++++++-
+ scripts/upload_llext_runtime.py             | 12 +++++++++++
+ 17 files changed, 98 insertions(+), 25 deletions(-)
+ mode change 100644 => 100755 scripts/ai8x_fetch.py
+ mode change 100644 => 100755 scripts/build_tflite.py
+ mode change 100644 => 100755 scripts/gen_increased_memory_overlay.py
+ mode change 100644 => 100755 scripts/io_spec_to_struct.py
+
+diff --git a/demo_app/iree_embedded_elf.conf b/demo_app/iree_embedded_elf.conf
+index d285f9e..5e43ef4 100644
+--- a/demo_app/iree_embedded_elf.conf
++++ b/demo_app/iree_embedded_elf.conf
+@@ -4,7 +4,8 @@
+ 
+ CONFIG_KENNING_ML_RUNTIME_IREE=y
+ CONFIG_KENNING_IREE_LOADER_EMBEDDED_ELF=y
+-CONFIG_KENNING_MODEL_PATH="./demo_app/model/tflite/magic_wand_no_softmax.tflite"
++
++CONFIG_KENNING_MODEL_PATH="model/tflite/magic_wand_no_softmax.tflite"
+ 
+ CONFIG_CPP=y
+ CONFIG_STD_C11=y
+diff --git a/demo_app/iree_vmvx.conf b/demo_app/iree_vmvx.conf
+index 47aa4f1..8f08359 100644
+--- a/demo_app/iree_vmvx.conf
++++ b/demo_app/iree_vmvx.conf
+@@ -5,7 +5,7 @@
+ CONFIG_KENNING_ML_RUNTIME_IREE=y
+ CONFIG_KENNING_IREE_LOADER_VMVX=y
+ 
+-CONFIG_KENNING_MODEL_PATH="./demo_app/model/tflite/magic_wand_no_softmax.tflite"
++CONFIG_KENNING_MODEL_PATH="model/tflite/magic_wand_no_softmax.tflite"
+ 
+ CONFIG_CPP=y
+ CONFIG_STD_C11=y
+diff --git a/demo_app/tflite.conf b/demo_app/tflite.conf
+index 4ee187b..0b618ca 100644
+--- a/demo_app/tflite.conf
++++ b/demo_app/tflite.conf
+@@ -5,7 +5,7 @@
+ CONFIG_KENNING_ML_RUNTIME_TFLITE=y
+ CONFIG_KENNING_TFLITE_BUFFER_SIZE=37
+ 
+-CONFIG_KENNING_MODEL_PATH="./demo_app/model/tflite/magic_wand.tflite"
++CONFIG_KENNING_MODEL_PATH="model/tflite/magic_wand.tflite"
+ 
+ CONFIG_CPP=y
+ CONFIG_STD_CPP17=y
+diff --git a/demo_app/tflite_int8.conf b/demo_app/tflite_int8.conf
+index 4c47a60..be6c35e 100644
+--- a/demo_app/tflite_int8.conf
++++ b/demo_app/tflite_int8.conf
+@@ -5,7 +5,7 @@
+ CONFIG_KENNING_ML_RUNTIME_TFLITE=y
+ CONFIG_KENNING_TFLITE_BUFFER_SIZE=15
+ 
+-CONFIG_KENNING_MODEL_PATH="./demo_app/model/tflite/magic_wand_int8.tflite"
++CONFIG_KENNING_MODEL_PATH="model/tflite/magic_wand_int8.tflite"
+ CONFIG_KENNING_DEMO_USE_QUANTIZED_MODEL=y
+ 
+ CONFIG_CPP=y
+diff --git a/demo_app/tvm.conf b/demo_app/tvm.conf
+index c5c111d..daa34b3 100644
+--- a/demo_app/tvm.conf
++++ b/demo_app/tvm.conf
+@@ -6,7 +6,7 @@ CONFIG_KENNING_ML_RUNTIME_TVM=y
+ CONFIG_KENNING_TVM_HEAP_SIZE=66
+ 
+ CONFIG_KENNING_TVM_MODEL_MAGIC_WAND=y
+-CONFIG_KENNING_MODEL_PATH="./demo_app/model/tvm/magic_wand"
++CONFIG_KENNING_MODEL_PATH="model/tvm/magic_wand"
+ 
+ CONFIG_TIMING_FUNCTIONS=y
+ CONFIG_TEST_RANDOM_GENERATOR=y
+diff --git a/demo_app/tvm_int8.conf b/demo_app/tvm_int8.conf
+index 2c67de7..27ac246 100644
+--- a/demo_app/tvm_int8.conf
++++ b/demo_app/tvm_int8.conf
+@@ -9,7 +9,7 @@ CONFIG_KENNING_TVM_INPUT_BUFFER_SIZE=1
+ 
+ CONFIG_KENNING_TVM_MODEL_MAGIC_WAND_INT8=y
+ CONFIG_KENNING_DEMO_USE_QUANTIZED_MODEL=y
+-CONFIG_KENNING_MODEL_PATH="./demo_app/model/tvm/magic_wand_int8"
++CONFIG_KENNING_MODEL_PATH="model/tvm/magic_wand_int8"
+ 
+ CONFIG_TIMING_FUNCTIONS=y
+ CONFIG_TEST_RANDOM_GENERATOR=y
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index e29dad6..f212690 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -2,4 +2,4 @@
+ #
+ # SPDX-License-Identifier: Apache-2.0
+ 
+-add_subdirectory(kenning_inference_lib)
++add_subdirectory_ifdef(CONFIG_KENNING_INFERENCE_LIB kenning_inference_lib)
+diff --git a/lib/kenning_inference_lib/CMakeLists.txt b/lib/kenning_inference_lib/CMakeLists.txt
+index 870edbc..4454f86 100644
+--- a/lib/kenning_inference_lib/CMakeLists.txt
++++ b/lib/kenning_inference_lib/CMakeLists.txt
+@@ -8,10 +8,8 @@ set(KENNING_LIB_DIR "${CMAKE_CURRENT_LIST_DIR}/../../")
+ 
+ include(cmake/model.cmake)
+ 
+-# if model path starts with "./" make it absolute
+-if (CONFIG_KENNING_MODEL_PATH MATCHES "^\./.*")
+-  set(CONFIG_KENNING_MODEL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../${CONFIG_KENNING_MODEL_PATH}")
+-endif (CONFIG_KENNING_MODEL_PATH MATCHES "^\./.*")
++# make model path absolute
++cmake_path(ABSOLUTE_PATH CONFIG_KENNING_MODEL_PATH BASE_DIRECTORY ${APPLICATION_CONFIG_DIR})
+ 
+ # sometimes generated ARM instructions in C source are uppercase while compiler expects lowercase
+ add_compile_definitions(__SEL=__sel)
+diff --git a/lib/kenning_inference_lib/Kconfig b/lib/kenning_inference_lib/Kconfig
+index 6d7f7af..d575f37 100644
+--- a/lib/kenning_inference_lib/Kconfig
++++ b/lib/kenning_inference_lib/Kconfig
+@@ -38,7 +38,7 @@ config KENNING_NRF_UART_SLEEP_AFTER_POLL_WORKAROUND
+ choice KENNING_COMMUNICATION_PROTOCOL
+         prompt "Protocol to be used to communicate with Kenning"
+         depends on KENNING_INFERENCE_LIB
+-        default KENNING_COMMUNICATION_PROTOCOL_UART
++        default KENNING_COMMUNICATION_PROTOCOL_NONE
+         help
+           This options selects protocol which will be used to communicate with
+           Kenning
+diff --git a/lib/kenning_inference_lib/cmake/model.cmake b/lib/kenning_inference_lib/cmake/model.cmake
+index 59e26c5..95e182a 100644
+--- a/lib/kenning_inference_lib/cmake/model.cmake
++++ b/lib/kenning_inference_lib/cmake/model.cmake
+@@ -111,7 +111,7 @@ macro(kenning_gen_tvm_model_sources runtime_src)
+         runtimes/tvm/generated/model_impl.graph_data
+         runtimes/tvm/generated/model_impl.graph_data.json
+       COMMAND
+-        ${CONFIG_KENNING_PYTHON_PATH} ${KENNING_LIB_DIR}/scripts/build_tvm.py
++        ${KENNING_LIB_DIR}/scripts/build_tvm.py
+           --input-path ${CONFIG_KENNING_MODEL_PATH}
+           --output-path runtimes/tvm/generated/model_impl.graph_data
+           --header-template-path ${CMAKE_CURRENT_LIST_DIR}/runtimes/tvm/generated/model_impl.h.template
+@@ -152,7 +152,7 @@ macro(kenning_gen_tflite_model_sources runtime_src)
+         runtimes/tflite/generated/model.tflite.json
+         runtimes/tflite/generated/ops_resolver.h
+       COMMAND
+-        ${CONFIG_KENNING_PYTHON_PATH} ${KENNING_LIB_DIR}/scripts/build_tflite.py
++        ${KENNING_LIB_DIR}/scripts/build_tflite.py
+           --model-path ${CONFIG_KENNING_MODEL_PATH}
+           --ops-list "${CONFIG_KENNING_TFLITE_OPS}"
+           --output-resolver-path runtimes/tflite/generated/ops_resolver.h
+@@ -165,7 +165,7 @@ macro(kenning_gen_tflite_model_sources runtime_src)
+         runtimes/tflite/generated/model.tflite.json
+         runtimes/tflite/generated/ops_resolver.h
+       COMMAND
+-        ${CONFIG_KENNING_PYTHON_PATH} ${KENNING_LIB_DIR}/scripts/build_tflite.py
++        ${KENNING_LIB_DIR}/scripts/build_tflite.py
+           --ops-list "${CONFIG_KENNING_TFLITE_OPS}"
+           --output-resolver-path runtimes/tflite/generated/ops_resolver.h
+           --output-model-path runtimes/tflite/generated/model.tflite
+@@ -177,7 +177,7 @@ macro(kenning_gen_tflite_model_sources runtime_src)
+         runtimes/tflite/generated/model.tflite.json
+         runtimes/tflite/generated/ops_resolver.h
+       COMMAND
+-        ${CONFIG_KENNING_PYTHON_PATH} ${KENNING_LIB_DIR}/scripts/build_tflite.py
++        ${KENNING_LIB_DIR}/scripts/build_tflite.py
+           --ops-list "Conv2D,FullyConnected,MaxPool2D,Reshape,Softmax"
+           --output-resolver-path runtimes/tflite/generated/ops_resolver.h
+           --output-model-path runtimes/tflite/generated/model.tflite
+@@ -271,7 +271,7 @@ macro(kenning_gen_ai8x_model_sources runtime_src)
+       runtimes/ai8x/generated/model.bin.json
+       runtimes/ai8x/generated/cnn_model.c
+     COMMAND
+-      ${CONFIG_KENNING_PYTHON_PATH} ${KENNING_LIB_DIR}/scripts/ai8x_fetch.py "${CONFIG_KENNING_MODEL_PATH}" runtimes/ai8x/generated/
++      ${KENNING_LIB_DIR}/scripts/ai8x_fetch.py "${CONFIG_KENNING_MODEL_PATH}" runtimes/ai8x/generated/
+   )
+ 
+   list(APPEND ${runtime_src} "runtimes/ai8x/generated/cnn_model.c")
+@@ -328,7 +328,7 @@ macro(kenning_gen_model_data)
+     DEPENDS
+       ${model_json_path}
+     COMMAND
+-      ${CONFIG_KENNING_PYTHON_PATH} ${KENNING_LIB_DIR}/scripts/io_spec_to_struct.py
++      ${KENNING_LIB_DIR}/scripts/io_spec_to_struct.py
+         --input-path ${model_json_path}
+         --output-path model_data_struct.h
+   )
+diff --git a/scripts/ai8x_fetch.py b/scripts/ai8x_fetch.py
+old mode 100644
+new mode 100755
+index 88e13c4..bfa588c
+--- a/scripts/ai8x_fetch.py
++++ b/scripts/ai8x_fetch.py
+@@ -1,3 +1,15 @@
++#!/usr/bin/env -S uv run --script
++#
++# /// script
++# requires-python = "~=3.11.0"
++# dependencies = [
++#     "kenning[tensorflow,torch,tflite,tvm,iree,onnxruntime]",
++# ]
++#
++# [tool.uv.sources]
++# kenning = { git = "https://github.com/antmicro/kenning.git" }
++# ///
++
+ # Copyright (c) 2025 Antmicro <www.antmicro.com>
+ #
+ # SPDX-License-Identifier: Apache-2.0
+diff --git a/scripts/build_tflite.py b/scripts/build_tflite.py
+old mode 100644
+new mode 100755
+index a59625b..5c97409
+--- a/scripts/build_tflite.py
++++ b/scripts/build_tflite.py
+@@ -1,3 +1,15 @@
++#!/usr/bin/env -S uv run --script
++#
++# /// script
++# requires-python = "~=3.11.0"
++# dependencies = [
++#     "kenning[tensorflow,torch,tflite,tvm,iree,onnx2tf]",
++# ]
++#
++# [tool.uv.sources]
++# kenning = { git = "https://github.com/antmicro/kenning.git" }
++# ///
++
+ # Copyright (c) 2024-2025 Antmicro <www.antmicro.com>
+ #
+ # SPDX-License-Identifier: Apache-2.0
+@@ -7,6 +19,7 @@ Script for generating TFLite model and TFLite Micro ops resolver header
+ for a given model and/or ops list.
+ """
+ 
++import shutil
+ import sys
+ import argparse
+ from pathlib import Path
+@@ -64,12 +77,9 @@ def main():
+                     additional_ops=args.ops_list.split(',') if args.ops_list else None,  # noqa: E501
+                     output_path=args.output_resolver_path,
+                 )
+-        args.output_model_path.write_bytes(args.model_path.read_bytes())
+-        args.output_model_path.with_suffix(
+-            f"{args.output_model_path.suffix}.json"
+-        ).write_bytes(
+-            args.model_path.with_suffix(f"{args.model_path.suffix}.json").read_bytes()
+-        )
++
++        shutil.copy(args.model_path, args.output_model_path)
++        shutil.copy(args.model_path.with_suffix(".tflite.json"), args.output_model_path.with_suffix(".tflite.json"))
+         return 0
+     if args.ops_list:
+         TFLiteCompiler.create_resolver_file_from_ops_list(
+diff --git a/scripts/build_tvm.py b/scripts/build_tvm.py
+index b7b1eb0..54b8a57 100755
+--- a/scripts/build_tvm.py
++++ b/scripts/build_tvm.py
+@@ -1,3 +1,15 @@
++#!/usr/bin/env -S uv run --script
++#
++# /// script
++# requires-python = "~=3.11.0"
++# dependencies = [
++#     "kenning[tensorflow,torch,tflite,tvm,iree,onnx2tf]",
++# ]
++#
++# [tool.uv.sources]
++# kenning = { git = "https://github.com/antmicro/kenning.git" }
++# ///
++
+ # Copyright (c) 2023-2025 Antmicro <www.antmicro.com>
+ #
+ # SPDX-License-Identifier: Apache-2.0
+diff --git a/scripts/gen_increased_memory_overlay.py b/scripts/gen_increased_memory_overlay.py
+old mode 100644
+new mode 100755
+index fa3d74d..b0a564d
+--- a/scripts/gen_increased_memory_overlay.py
++++ b/scripts/gen_increased_memory_overlay.py
+@@ -1,3 +1,9 @@
++#!/usr/bin/env -S uv run --script
++#
++# /// script
++# requires-python = "~=3.11.0"
++# ///
++
+ #!/usr/bin/env python3
+ 
+ # Copyright (c) 2025 Antmicro <www.antmicro.com>
+diff --git a/scripts/io_spec_to_struct.py b/scripts/io_spec_to_struct.py
+old mode 100644
+new mode 100755
+index 5e18b7a..ab5dbe6
+--- a/scripts/io_spec_to_struct.py
++++ b/scripts/io_spec_to_struct.py
+@@ -1,3 +1,15 @@
++#!/usr/bin/env -S uv run --script
++#
++# /// script
++# requires-python = "~=3.11.0"
++# dependencies = [
++#     "kenning[tensorflow,torch,tflite,tvm,iree,onnx2tf]",
++# ]
++#
++# [tool.uv.sources]
++# kenning = { git = "https://github.com/antmicro/kenning.git" }
++# ///
++
+ # Copyright (c) 2025 Antmicro <www.antmicro.com>
+ #
+ # SPDX-License-Identifier: Apache-2.0
+diff --git a/scripts/run_renode.py b/scripts/run_renode.py
+index c0f5a75..195f94a 100755
+--- a/scripts/run_renode.py
++++ b/scripts/run_renode.py
+@@ -1,4 +1,14 @@
+-#!/usr/bin/env python3
++#!/usr/bin/env -S uv run --script
++#
++# /// script
++# requires-python = "~=3.11.0"
++# dependencies = [
++#     "pyrenode3[all]",
++# ]
++#
++# [tool.uv.sources]
++# pyrenode3 = { git = "https://github.com/antmicro/pyrenode3.git" }
++# ///
+ 
+ # Copyright (c) 2023-2025 Antmicro <www.antmicro.com>
+ #
+diff --git a/scripts/upload_llext_runtime.py b/scripts/upload_llext_runtime.py
+index 4382f55..5107a13 100755
+--- a/scripts/upload_llext_runtime.py
++++ b/scripts/upload_llext_runtime.py
+@@ -1,3 +1,15 @@
++#!/usr/bin/env -S uv run --script
++#
++# /// script
++# requires-python = "~=3.11.0"
++# dependencies = [
++#     "kenning[uart]",
++# ]
++#
++# [tool.uv.sources]
++# kenning = { git = "https://github.com/antmicro/kenning.git" }
++# ///
++
+ # Copyright (c) 2020-2024 Antmicro <www.antmicro.com>
+ #
+ # SPDX-License-Identifier: Apache-2.0
+-- 
+2.47.1
+

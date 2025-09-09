@@ -26,7 +26,7 @@ twister:
   image: "zephyrprojectrtos/ci:v0.28.2"
   before_get_sources:
     - apt update -qqy
-    - apt install -qqy curl git
+    - apt install -qqy curl git xxd
   before_script:
     - west init -l .
     - west update

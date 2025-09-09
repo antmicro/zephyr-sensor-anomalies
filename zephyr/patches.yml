@@ -5,3 +5,9 @@ patches:
     author: Maciej Torhan
     email: mtorhan@antmicro.com
     date: 2025-08-14
+  - path: kenning-zephyr-runtime/0001-improvements-for-external-use.patch
+    sha256sum: 4877dc43bbb6b0437435ab43d07a96b2c6ee7df83b6b6742b62b16d365725b2a
+    module: kenning-zephyr-runtime
+    author: Mikolaj Klikowicz
+    email: mklikowicz@antmicro.com
+    date: 2025-10-21
