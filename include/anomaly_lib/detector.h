@@ -7,6 +7,7 @@ enum detector_status
 {
     DETECTOR_STATUS_OK = 0,
     DETECTOR_STATUS_ERROR,
+    DETECTOR_STATUS_SIZE_ERR,
 };
 
 struct detector
@@ -14,6 +15,7 @@ struct detector
     /* Detector-specific implementation of `detector_detect` */
     int32_t (*detect)(struct detector *, const float *, float *);
     int32_t (*init)(struct detector *);
+    int32_t (*get_info)(struct detector *, void **);
 };
 
 extern struct detector g_detector;
@@ -35,6 +37,16 @@ static inline int32_t detector_init()
         return 0;
     }
     return g_detector.init(&g_detector);
+}
+
+static inline int32_t detector_get_info(void *info)
+{
+    if (!g_detector.get_info)
+    {
+        return -DETECTOR_STATUS_ERROR;
+    }
+
+    return g_detector.get_info(&g_detector, info);
 }
 
 #endif // ANOMALY_LIB_DETECTOR_H

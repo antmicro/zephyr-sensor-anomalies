@@ -26,3 +26,15 @@ config ANOMALY_LIB_EMLEARN_MODEL_PATH
     prompt "emlearn model path"
     string
     depends on ANOMALY_LIB_BACKEND_EMLEARN
+
+config ANOMALY_LIB_KENNING_MAX_INPUT_COUNT
+    prompt "kenning backend maximum input count"
+    int
+    default 32
+    depends on ANOMALY_LIB_BACKEND_KENNING
+
+config ANOMALY_LIB_KENNING_MAX_OUTPUT_COUNT
+    prompt "kenning backend maximum output count"
+    int
+    default 32
+    depends on ANOMALY_LIB_BACKEND_KENNING
