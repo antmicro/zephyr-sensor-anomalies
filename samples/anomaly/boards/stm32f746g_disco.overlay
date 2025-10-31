@@ -10,3 +10,9 @@
         status = "okay";
     };
 };
+
+/ {
+    aliases {
+        kcomms = &usart6;
+    };
+};

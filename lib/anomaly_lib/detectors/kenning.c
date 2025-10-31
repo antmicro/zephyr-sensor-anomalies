@@ -11,15 +11,21 @@
 
 #include <zephyr/kernel.h>
 
+/* Model specific input and output sizes in bytes. */
 static size_t gp_input_N, gp_output_N;
 
+/* Kenning detector specific extra detection info. */
 static struct kenning_detect_info gp_info;
 
+/**
+ * Maintains a sliding window in `outputbuf` from the samples passed in `inputbuf`.
+ */
 static int32_t detector_kenning_sliding_window(struct detector *d, const float *inputbuf, float *outputbuf)
 {
     size_t row_N, col_N;
-    row_N = model_spec.input_shape[0][0];
-    col_N = model_spec.input_shape[0][1];
+    size_t num_input_dim = model_spec.num_input_dim[0];
+    row_N = model_spec.input_shape[0][num_input_dim - 2];
+    col_N = model_spec.input_shape[0][num_input_dim - 1];
 
     for (uint32_t i = 0; i < row_N - 1; i++)
     {
@@ -31,6 +37,9 @@ static int32_t detector_kenning_sliding_window(struct detector *d, const float *
     return DETECTOR_STATUS_OK;
 }
 
+/**
+ * Runs the inference and computes the outlier score.
+ */
 static int32_t detector_kenning_detect_run(struct detector *d, const float *buf, float *score)
 {
     status_t status = STATUS_OK;
@@ -57,6 +66,9 @@ static int32_t detector_kenning_detect_run(struct detector *d, const float *buf,
     return DETECTOR_STATUS_OK;
 }
 
+/**
+ * Wrapper for `detector_kenning_detect_run` that supports the sliding window.
+ */
 static int32_t detector_kenning_detect(struct detector *d, const float *buf, float *score)
 {
     static float sliding_window_buffer[CONFIG_ANOMALY_LIB_KENNING_MAX_INPUT_COUNT];

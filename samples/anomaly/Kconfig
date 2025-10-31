@@ -2,6 +2,11 @@ menu "Zephyr"
 source "Kconfig.zephyr"
 endmenu
 
+config KENNING_PROTOCOL_INTEGRATION
+    bool "Max sum of channels in available sensors"
+    default n
+    depends on PROVIDER_LIB && ANOMALY_LIB && KENNING_COMMUNICATION_PROTOCOL_UART && KENNING_INFERENCE_LIB
+
 module = APP
 module-str = app
 source "subsys/logging/Kconfig.template.log_config"
