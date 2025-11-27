@@ -27,6 +27,12 @@ config ANOMALY_LIB_EMLEARN_MODEL_PATH
     string
     depends on ANOMALY_LIB_BACKEND_EMLEARN
 
+config ANOMALY_LIB_EMLEARN_THRESHOLD
+    prompt "emlearn threshold"
+    int
+    default 50000
+    depends on ANOMALY_LIB_BACKEND_EMLEARN
+
 config ANOMALY_LIB_KENNING_MAX_INPUT_COUNT
     prompt "kenning backend maximum input count"
     int

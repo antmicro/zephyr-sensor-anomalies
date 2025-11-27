@@ -10,7 +10,7 @@ if(${CONFIG_ANOMALY_LIB_BACKEND_EMLEARN})
 
     add_custom_command(
         OUTPUT detectors/emlearn_model_impl.c
-        COMMAND ${CMAKE_CURRENT_LIST_DIR}/../../scripts/gen_emlearn.py ${CONFIG_ANOMALY_LIB_EMLEARN_MODEL_PATH} detectors/emlearn_model_impl.c
+        COMMAND ${CMAKE_CURRENT_LIST_DIR}/../../scripts/gen_emlearn.py ${CONFIG_ANOMALY_LIB_EMLEARN_MODEL_PATH} detectors/emlearn_model_impl.c ${CONFIG_ANOMALY_LIB_EMLEARN_THRESHOLD}
         DEPENDS ${CMAKE_CURRENT_LIST_DIR}/../../scripts/gen_emlearn.py ${CONFIG_ANOMALY_LIB_EMLEARN_MODEL_PATH}
     )
 endif()
