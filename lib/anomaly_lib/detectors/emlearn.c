@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025 Antmicro <www.antmicro.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include <stddef.h>
 
 #include <anomaly_lib/detector.h>

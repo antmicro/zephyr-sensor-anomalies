@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025 Antmicro <www.antmicro.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef PROVIDER_LIB_PROVIDER_
 #define PROVIDER_LIB_PROVIDER_
 

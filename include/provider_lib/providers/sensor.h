@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025 Antmicro <www.antmicro.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef PROVIDER_LIB_PROVIDERS_SENSOR_H
 #define PROVIDER_LIB_PROVIDERS_SENSOR_H
 

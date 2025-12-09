@@ -1,5 +1,9 @@
 #!/usr/bin/env -S uv run --script
 #
+# Copyright (c) 2025 Antmicro <www.antmicro.com>
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [

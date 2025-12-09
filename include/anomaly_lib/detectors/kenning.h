@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025 Antmicro <www.antmicro.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef ANOMALY_LIB_DETECTORS_KENNING_H_
 #define ANOMALY_LIB_DETECTORS_KENNING_H_
 
