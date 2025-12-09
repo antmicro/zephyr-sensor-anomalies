@@ -1,8 +1,18 @@
-# Kenning Zephyr Sensor Anomalies
+# Zephyr Sensor Anomalies
 
 Copyright (c) 2025 [Antmicro](https://www.antmicro.com)
 
+Zephyr Sensor Anomalies is a [Zephyr RTOS](https://www.zephyrproject.org/) library that allows to track anomalies in provided set of sensors using Machine Learning models ran with [Kenning Zephyr Runtime](https://github.com/antmicro/kenning-zephyr-runtime) or [emlearn](https://github.com/emlearn/emlearn).
+
+It provides tools for:
+
+* Generating datasets from sensor readings
+* Setting up analysis of sensor readings using neural networks, kNN, decision trees, ...
+* Setting up callbacks on detected anomalies
+* Evaluating anomaly detection using [Kenning](https://kenning.ai) framework
+
 ## Installing dependencies
+
 Install [Zephyr dependencies](https://docs.zephyrproject.org/latest/develop/getting_started/index.html#install-dependencies):
 
 ```shell skip
