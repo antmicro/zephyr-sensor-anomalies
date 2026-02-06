@@ -32,13 +32,13 @@ index d285f9e..5e43ef4 100644
 --- a/demo_app/iree_embedded_elf.conf
 +++ b/demo_app/iree_embedded_elf.conf
 @@ -4,7 +4,8 @@
- 
+
  CONFIG_KENNING_ML_RUNTIME_IREE=y
  CONFIG_KENNING_IREE_LOADER_EMBEDDED_ELF=y
 -CONFIG_KENNING_MODEL_PATH="./demo_app/model/tflite/magic_wand_no_softmax.tflite"
 +
 +CONFIG_KENNING_MODEL_PATH="model/tflite/magic_wand_no_softmax.tflite"
- 
+
  CONFIG_CPP=y
  CONFIG_STD_C11=y
 diff --git a/demo_app/iree_vmvx.conf b/demo_app/iree_vmvx.conf
@@ -48,10 +48,10 @@ index 47aa4f1..8f08359 100644
 @@ -5,7 +5,7 @@
  CONFIG_KENNING_ML_RUNTIME_IREE=y
  CONFIG_KENNING_IREE_LOADER_VMVX=y
- 
+
 -CONFIG_KENNING_MODEL_PATH="./demo_app/model/tflite/magic_wand_no_softmax.tflite"
 +CONFIG_KENNING_MODEL_PATH="model/tflite/magic_wand_no_softmax.tflite"
- 
+
  CONFIG_CPP=y
  CONFIG_STD_C11=y
 diff --git a/demo_app/tflite.conf b/demo_app/tflite.conf
@@ -61,10 +61,10 @@ index 4ee187b..0b618ca 100644
 @@ -5,7 +5,7 @@
  CONFIG_KENNING_ML_RUNTIME_TFLITE=y
  CONFIG_KENNING_TFLITE_BUFFER_SIZE=37
- 
+
 -CONFIG_KENNING_MODEL_PATH="./demo_app/model/tflite/magic_wand.tflite"
 +CONFIG_KENNING_MODEL_PATH="model/tflite/magic_wand.tflite"
- 
+
  CONFIG_CPP=y
  CONFIG_STD_CPP17=y
 diff --git a/demo_app/tflite_int8.conf b/demo_app/tflite_int8.conf
@@ -74,11 +74,11 @@ index 4c47a60..be6c35e 100644
 @@ -5,7 +5,7 @@
  CONFIG_KENNING_ML_RUNTIME_TFLITE=y
  CONFIG_KENNING_TFLITE_BUFFER_SIZE=15
- 
+
 -CONFIG_KENNING_MODEL_PATH="./demo_app/model/tflite/magic_wand_int8.tflite"
 +CONFIG_KENNING_MODEL_PATH="model/tflite/magic_wand_int8.tflite"
  CONFIG_KENNING_DEMO_USE_QUANTIZED_MODEL=y
- 
+
  CONFIG_CPP=y
 diff --git a/demo_app/tvm.conf b/demo_app/tvm.conf
 index c5c111d..daa34b3 100644
@@ -86,11 +86,11 @@ index c5c111d..daa34b3 100644
 +++ b/demo_app/tvm.conf
 @@ -6,7 +6,7 @@ CONFIG_KENNING_ML_RUNTIME_TVM=y
  CONFIG_KENNING_TVM_HEAP_SIZE=66
- 
+
  CONFIG_KENNING_TVM_MODEL_MAGIC_WAND=y
 -CONFIG_KENNING_MODEL_PATH="./demo_app/model/tvm/magic_wand"
 +CONFIG_KENNING_MODEL_PATH="model/tvm/magic_wand"
- 
+
  CONFIG_TIMING_FUNCTIONS=y
  CONFIG_TEST_RANDOM_GENERATOR=y
 diff --git a/demo_app/tvm_int8.conf b/demo_app/tvm_int8.conf
@@ -98,12 +98,12 @@ index 2c67de7..27ac246 100644
 --- a/demo_app/tvm_int8.conf
 +++ b/demo_app/tvm_int8.conf
 @@ -9,7 +9,7 @@ CONFIG_KENNING_TVM_INPUT_BUFFER_SIZE=1
- 
+
  CONFIG_KENNING_TVM_MODEL_MAGIC_WAND_INT8=y
  CONFIG_KENNING_DEMO_USE_QUANTIZED_MODEL=y
 -CONFIG_KENNING_MODEL_PATH="./demo_app/model/tvm/magic_wand_int8"
 +CONFIG_KENNING_MODEL_PATH="model/tvm/magic_wand_int8"
- 
+
  CONFIG_TIMING_FUNCTIONS=y
  CONFIG_TEST_RANDOM_GENERATOR=y
 diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
@@ -113,7 +113,7 @@ index e29dad6..f212690 100644
 @@ -2,4 +2,4 @@
  #
  # SPDX-License-Identifier: Apache-2.0
- 
+
 -add_subdirectory(kenning_inference_lib)
 +add_subdirectory_ifdef(CONFIG_KENNING_INFERENCE_LIB kenning_inference_lib)
 diff --git a/lib/kenning_inference_lib/CMakeLists.txt b/lib/kenning_inference_lib/CMakeLists.txt
@@ -121,16 +121,16 @@ index 870edbc..4454f86 100644
 --- a/lib/kenning_inference_lib/CMakeLists.txt
 +++ b/lib/kenning_inference_lib/CMakeLists.txt
 @@ -8,10 +8,8 @@ set(KENNING_LIB_DIR "${CMAKE_CURRENT_LIST_DIR}/../../")
- 
+
  include(cmake/model.cmake)
- 
+
 -# if model path starts with "./" make it absolute
 -if (CONFIG_KENNING_MODEL_PATH MATCHES "^\./.*")
 -  set(CONFIG_KENNING_MODEL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../${CONFIG_KENNING_MODEL_PATH}")
 -endif (CONFIG_KENNING_MODEL_PATH MATCHES "^\./.*")
 +# make model path absolute
 +cmake_path(ABSOLUTE_PATH CONFIG_KENNING_MODEL_PATH BASE_DIRECTORY ${APPLICATION_CONFIG_DIR})
- 
+
  # sometimes generated ARM instructions in C source are uppercase while compiler expects lowercase
  add_compile_definitions(__SEL=__sel)
 diff --git a/lib/kenning_inference_lib/Kconfig b/lib/kenning_inference_lib/Kconfig
@@ -193,7 +193,7 @@ index 59e26c5..95e182a 100644
 -      ${CONFIG_KENNING_PYTHON_PATH} ${KENNING_LIB_DIR}/scripts/ai8x_fetch.py "${CONFIG_KENNING_MODEL_PATH}" runtimes/ai8x/generated/
 +      ${KENNING_LIB_DIR}/scripts/ai8x_fetch.py "${CONFIG_KENNING_MODEL_PATH}" runtimes/ai8x/generated/
    )
- 
+
    list(APPEND ${runtime_src} "runtimes/ai8x/generated/cnn_model.c")
 @@ -328,7 +328,7 @@ macro(kenning_gen_model_data)
      DEPENDS
@@ -251,7 +251,7 @@ index a59625b..5c97409
 @@ -7,6 +19,7 @@ Script for generating TFLite model and TFLite Micro ops resolver header
  for a given model and/or ops list.
  """
- 
+
 +import shutil
  import sys
  import argparse
@@ -289,7 +289,7 @@ index b7b1eb0..54b8a57 100755
 +# kenning = { git = "https://github.com/antmicro/kenning.git" }
 +# ///
 +
- # Copyright (c) 2023-2025 Antmicro <www.antmicro.com>
+ # Copyright (c) 2023-2026 Antmicro <www.antmicro.com>
  #
  # SPDX-License-Identifier: Apache-2.0
 diff --git a/scripts/gen_increased_memory_overlay.py b/scripts/gen_increased_memory_overlay.py
@@ -306,7 +306,7 @@ index fa3d74d..b0a564d
 +# ///
 +
  #!/usr/bin/env python3
- 
+
  # Copyright (c) 2025 Antmicro <www.antmicro.com>
 diff --git a/scripts/io_spec_to_struct.py b/scripts/io_spec_to_struct.py
 old mode 100644
@@ -347,7 +347,7 @@ index c0f5a75..195f94a 100755
 +# [tool.uv.sources]
 +# pyrenode3 = { git = "https://github.com/antmicro/pyrenode3.git" }
 +# ///
- 
+
  # Copyright (c) 2023-2025 Antmicro <www.antmicro.com>
  #
 diff --git a/scripts/upload_llext_runtime.py b/scripts/upload_llext_runtime.py
@@ -370,6 +370,5 @@ index 4382f55..5107a13 100755
  # Copyright (c) 2020-2024 Antmicro <www.antmicro.com>
  #
  # SPDX-License-Identifier: Apache-2.0
--- 
+--
 2.47.1
-
