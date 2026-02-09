@@ -15,8 +15,6 @@
 #include <kenning_inference_lib/core/kenning_protocol.h>
 #include <kenning_inference_lib/core/loaders.h>
 
-#define DELAY 10
-
 /**
  * 32-bit equivalent of `k_uptime_delta`.
  */
@@ -214,10 +212,10 @@ int main()
 
         telapsed = time_delta(&tstart);
 
-        int32_t to_wait = DELAY - telapsed;
+        int32_t to_wait = CONFIG_PROCESSING_DELAY - telapsed;
         if (to_wait > 0)
         {
-            k_msleep(10);
+            k_msleep(to_wait);
         }
         else
         {

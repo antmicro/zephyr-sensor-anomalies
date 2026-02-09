@@ -11,6 +11,12 @@ config KENNING_PROTOCOL_INTEGRATION
     default n
     depends on PROVIDER_LIB && ANOMALY_LIB && KENNING_COMMUNICATION_PROTOCOL_UART && KENNING_INFERENCE_LIB
 
+config PROCESSING_DELAY
+    int "Expected time [ms] of processing for a single model sample"
+    default 50
+    depends on PROVIDER_LIB && ANOMALY_LIB
+
+
 module = APP
 module-str = app
 source "subsys/logging/Kconfig.template.log_config"
