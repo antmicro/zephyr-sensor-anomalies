@@ -1,0 +1,40 @@
+platform:
+  type: ZephyrPlatform
+  parameters:
+    name: stm32f746g_disco
+    simulated: true
+    zephyr_build_path: ../../build
+    sensors:
+      - i2c1.lis2ds12_1
+      - i2c1.lis2ds12_2
+    sensors_frequency: 99.5
+    runtime_init_log_msg: "*** Booting Zephyr OS build"
+    disable_profiler: true
+model_wrapper:
+  type: PyTorchGenericClassification
+  parameters:
+    model_path: ./net.pt
+    model_source: ./model.py
+    training_batch_size: 512
+    num_epochs: 10
+dataset:
+  type: TabularDataset
+  parameters:
+    dataset_root: build/data
+    dataset_path: https://dl.antmicro.com/kenning/datasets/anomaly_detection/minispot.csv
+    cols_x: ["roll", 'pitch', 'gz', 'ax', 'ay', az]
+    col_y: "anomaly"
+    window_size: 8
+    shuffle_data: False
+    download_dataset: True
+inference_loop:
+  type: AnomalyDetectionInferenceLoop
+  parameters:
+    inference_limit: 512
+optimizers:
+- type: TFLiteCompiler
+  parameters:
+    compiled_model_path: build/fp32.1.tflite
+    inference_input_type: float32
+    inference_output_type: float32
+    target: default
