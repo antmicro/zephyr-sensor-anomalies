@@ -30,6 +30,11 @@ endif()
 
 if(${CONFIG_ANOMALY_LIB_BACKEND_NONE})
     message(FATAL_ERROR "No anomaly backend selected. Enable one of 'CONFIG_ANOMALY_LIB_BACKEND_*' or disable 'CONFIG_ANOMALY_LIB'.")
-endif()
+  endif()
 
+if(${CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS})
+  list(APPEND src "detector.c")
+  add_compile_definitions(CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS)
+  add_compile_definitions(DETECTOR_THREADS_STACKSIZE=${CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_STACKSIZE})
+endif()
 zephyr_library_sources(${src})

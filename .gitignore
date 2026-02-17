@@ -2,3 +2,19 @@
 /.venv
 /build
 /twister-out*
+/data.csv
+/compile_commands.json
+
+.cache/
+__pycache__/
+build/
+logdir/
+report/
+saved_model/
+
+/workflows/minispot/net.pt
+/workflows/minispot/net_final.pt
+/workflows/minispot/results.json
+
+# emacs-specific files
+.dir-locals.el

@@ -48,3 +48,14 @@ config ANOMALY_LIB_KENNING_MAX_OUTPUT_COUNT
     int
     default 32
     depends on ANOMALY_LIB_BACKEND_KENNING
+
+config ANOMALY_LIB_DETECTION_CALLBACKS
+    prompt "callback-based anomaly detection handling"
+    bool
+    default y
+
+config ANOMALY_LIB_DETECTION_CALLBACKS_STACKSIZE
+    prompt "stack size for each thread spawned"
+    int
+    default 2048
+    depends on ANOMALY_LIB_DETECTION_CALLBACKS
