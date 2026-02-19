@@ -1,15 +1,14 @@
 /*
- * Copyright (c) 2025 Antmicro <www.antmicro.com>
+ * Copyright (c) 2026 Antmicro <www.antmicro.com>
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "zephyr/kernel/thread_stack.h"
-#include <string.h>
 #include <zephyr/kernel.h>
 
 #include <stdatomic.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <anomaly_lib/detector.h>
 #include <provider_lib/provider.h>
@@ -165,8 +164,10 @@ int main()
         return -1;
     }
 
-    uint32_t sample_count = 0;
-
+#ifdef CONFIG_CLASSIFIER_SAMPLES_BATCHED
+    size_t sample_idx = 0;
+    float samples[CONFIG_CLASSIFIER_SAMPLES_BATCHSIZE] = {0};
+#endif /* CONFIG_CLASSIFIER_SAMPLES_BATCHED */
     float score;
 
     uint32_t tstart, telapsed;
@@ -219,7 +220,9 @@ int main()
             return -1;
         }
 
+#ifndef CONFIG_CLASSIFIER_SAMPLES_BATCHED
         detector_classifier_submit_sample(&g_detector, score);
+#endif /* CONFIG_CLASSIFIER_SAMPLES_BATCHED */
 
         if (protocol_initialized)
         {
@@ -237,6 +240,17 @@ int main()
         {
             printf("Detection too slow: %d\n", (int32_t)telapsed);
         }
+
+#ifdef CONFIG_CLASSIFIER_SAMPLES_BATCHED
+        samples[sample_idx] = score;
+        if (sample_idx++ == CONFIG_CLASSIFIER_SAMPLES_BATCHSIZE)
+        {
+            /* Batchsize */
+            detector_classifier_submit_samples_batch(&g_detector, samples, sample_idx - 1);
+            sample_idx = 0;
+        }
+
+#endif /* CONFIG_CLASSIFIER_SAMPLES_BATCHED */
     }
 
     detector_classifier_deinit(&g_detector);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Antmicro <www.antmicro.com>
+ * Copyright (c) 2026 Antmicro <www.antmicro.com>
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -12,9 +12,6 @@
 #include <stdlib.h>
 
 #include <zephyr/kernel.h>
-
-#define DETECTOR_MAX_CB_HANDLERS 8
-#define DETECTOR_WORK_Q_RINGBUF_SIZE 128
 
 enum detector_status
 {
@@ -48,19 +45,18 @@ struct detector
     struct k_work_delayable dw;
 
     /* Consumer and producer indices for the ring buffer */
-    size_t consumer_idx;
-    _Atomic size_t producer_idx;
+    _Atomic size_t producer_idx, consumer_idx;
 
     /** Number of registered callbacks */
     size_t num_cbs;
     /** Struct containing the registered callbacks */
-    detector_cb_t cb_hdlrs[DETECTOR_MAX_CB_HANDLERS];
-    void *cb_ctxs[DETECTOR_MAX_CB_HANDLERS];
+    detector_cb_t cb_hdlrs[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS];
+    void *cb_ctxs[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS];
 
     /** Thresholds on when the callbacks will be called */
     int64_t process_ms;
     float threshold;
-    float wq_buf[DETECTOR_WORK_Q_RINGBUF_SIZE];
+    float wq_buf[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_WORK_Q_RINGBUF_SIZE];
 #endif /* CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS */
 };
 
@@ -116,6 +112,12 @@ int32_t detector_classifier_init(struct detector *d, float threshold, int64_t pr
  * @param prio   Scheduling priority
  */
 int32_t detector_classifier_start(struct detector *d, int prio);
+
+/**
+ * Shut down and deinitialize the callback-handling system.
+ *
+ * @param d  Initialized detector object
+ */
 int32_t detector_classifier_deinit(struct detector *d);
 
 /**
@@ -125,6 +127,16 @@ int32_t detector_classifier_deinit(struct detector *d);
  * @param sample    Logit detected
  */
 int32_t detector_classifier_submit_sample(struct detector *d, float sample);
+
+/**
+ * Submit batched scores/logits to the classifier. The reduces the function call overhead,
+ * number of atomic updates, and better memory throughput.
+ *
+ * @param d         Detector object
+ * @param samples   Array of logits/scores
+ * @param n_samples The number of samples in `samples` array.
+ */
+int32_t detector_classifier_submit_samples_batch(struct detector *d, float *samples, size_t n_samples);
 
 /**
  * Register a callback that is run when an anomaly is detected.

@@ -59,3 +59,15 @@ config ANOMALY_LIB_DETECTION_CALLBACKS_STACKSIZE
     int
     default 2048
     depends on ANOMALY_LIB_DETECTION_CALLBACKS
+
+config ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS
+    prompt "maximum number of callback handlers allowed"
+    int
+    default 8
+    depends on ANOMALY_LIB_DETECTION_CALLBACKS
+
+config ANOMALY_LIB_DETECTION_CALLBACKS_WORK_Q_RINGBUF_SIZE
+    prompt "size of the ring buffer for callback work queues"
+    int
+    default 128
+    depends on ANOMALY_LIB_DETECTION_CALLBACKS

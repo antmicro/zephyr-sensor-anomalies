@@ -120,8 +120,6 @@ static int32_t detector_kenning_init(struct detector *d)
 
 #ifdef CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS
     d->num_cbs = 0;
-    d->cb_hdlrs[0] = NULL;
-    d->wq_buf[0] = 0.0;
 #endif
 
     return DETECTOR_STATUS_OK;

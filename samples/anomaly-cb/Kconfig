@@ -1,0 +1,32 @@
+# Copyright (c) 2025 Antmicro <www.antmicro.com>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+menu "Zephyr"
+source "Kconfig.zephyr"
+endmenu
+
+config KENNING_PROTOCOL_INTEGRATION
+    bool "Max sum of channels in available sensors"
+    default n
+    depends on PROVIDER_LIB && ANOMALY_LIB && KENNING_COMMUNICATION_PROTOCOL_UART && KENNING_INFERENCE_LIB
+
+config PROCESSING_DELAY
+    int "Expected time [ms] of processing for a single model sample"
+    default 50
+    depends on PROVIDER_LIB && ANOMALY_LIB
+
+config CLASSIFIER_SAMPLES_BATCHED
+    bool "Batch the number of samples when sending to the classifier"
+    default n
+    depends on PROVIDER_LIB && ANOMALY_LIB
+
+config CLASSIFIER_SAMPLES_BATCHSIZE
+    int "Size of each batch when sending to the classifier"
+    default 16
+    depends on CLASSIFIER_SAMPLES_BATCHED
+
+
+module = APP
+module-str = app
+source "subsys/logging/Kconfig.template.log_config"

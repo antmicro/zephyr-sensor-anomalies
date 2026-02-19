@@ -1,20 +1,14 @@
-/renode_latest
-/.venv
 /build
-/twister-out*
-/data.csv
+/.cache
 /compile_commands.json
-
-.cache/
-__pycache__/
-build/
-logdir/
-report/
-saved_model/
-
-/workflows/minispot/net.pt
-/workflows/minispot/net_final.pt
-/workflows/minispot/results.json
-
-# emacs-specific files
+/data.csv
 .dir-locals.el
+__pycache__/
+/renode_latest
+/twister-out*
+/.venv
+/workflows
+
+# editor-specific files
+.dir-locals.el
+.vscode
