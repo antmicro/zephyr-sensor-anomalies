@@ -147,15 +147,7 @@ int main()
         return -1;
     }
 
-    if (sizeof(buffer) / sizeof(buffer[0]) < pr.dst_N)
-    {
-        printk("Insufficient buffer size: %u < %u", sizeof(buffer) / sizeof(buffer[0]), pr.dst_N);
-        return -1;
-    }
-
     int protocol_initialized = !initialize_protocol();
-
-    uint32_t i = 0;
 
     status = detector_init();
     if (status)
@@ -164,22 +156,16 @@ int main()
         return -1;
     }
 
-#ifdef CONFIG_CLASSIFIER_SAMPLES_BATCHED
-    size_t sample_idx = 0;
-    float samples[CONFIG_CLASSIFIER_SAMPLES_BATCHSIZE] = {0};
-#endif /* CONFIG_CLASSIFIER_SAMPLES_BATCHED */
-    float score;
+    struct detector_classifier dc = {0};
 
-    uint32_t tstart, telapsed;
-
-    status = detector_classifier_init(&g_detector, 0.5, 100ll, 0);
+    status = detector_classifier_init(&g_detector, &dc, &pr, 100, 0.5);
     if (status)
     {
         printk("Classifier init failed: %d\n", status);
         return -1;
     }
 
-    status = detector_classifier_register_cb(&g_detector, sample_cb, NULL);
+    status = detector_classifier_register_cb(&dc, sample_cb, NULL);
     if (status)
     {
         printk("Failed to register callback: %d\n", status);
@@ -187,14 +173,14 @@ int main()
     }
 
     const char *prefix_str = "prefix_str";
-    status = detector_classifier_register_cb(&g_detector, another_sample_cb, (void *)prefix_str);
+    status = detector_classifier_register_cb(&dc, another_sample_cb, (void *)prefix_str);
     if (status)
     {
         printk("Failed to register another callback: %d\n", status);
         return -1;
     }
 
-    status = detector_classifier_start(&g_detector, 5);
+    status = detector_classifier_start(&dc, 6, DETECTOR_DEFAULT_OPTS);
     if (status)
     {
         printk("Faile to start classifier: %d\n", status);
@@ -203,55 +189,8 @@ int main()
 
     while (1)
     {
-        tstart = k_uptime_get_32();
-        status = provider_reader_read_all(&pr, buffer);
-
-        if (status)
-        {
-            printk("Sensor read failed: %d\n", status);
-            return -1;
-        }
-
-        status = detector_detect(buffer, &score);
-
-        if (status)
-        {
-            printk("Detector failed: %d\n", status);
-            return -1;
-        }
-
-#ifndef CONFIG_CLASSIFIER_SAMPLES_BATCHED
-        detector_classifier_submit_sample(&g_detector, score);
-#endif /* CONFIG_CLASSIFIER_SAMPLES_BATCHED */
-
-        if (protocol_initialized)
-        {
-            send_score(score);
-        }
-
-        telapsed = time_delta(&tstart);
-
-        int32_t to_wait = CONFIG_PROCESSING_DELAY - telapsed;
-        if (to_wait > 0)
-        {
-            k_msleep(to_wait);
-        }
-        else
-        {
-            printf("Detection too slow: %d\n", (int32_t)telapsed);
-        }
-
-#ifdef CONFIG_CLASSIFIER_SAMPLES_BATCHED
-        samples[sample_idx] = score;
-        if (sample_idx++ == CONFIG_CLASSIFIER_SAMPLES_BATCHSIZE)
-        {
-            /* Batchsize */
-            detector_classifier_submit_samples_batch(&g_detector, samples, sample_idx - 1);
-            sample_idx = 0;
-        }
-
-#endif /* CONFIG_CLASSIFIER_SAMPLES_BATCHED */
+        k_msleep(1000);
     }
 
-    detector_classifier_deinit(&g_detector);
+    detector_classifier_deinit(&dc);
 }

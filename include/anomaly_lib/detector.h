@@ -13,13 +13,26 @@
 
 #include <zephyr/kernel.h>
 
+#include <provider_lib/provider.h>
+
 enum detector_status
 {
     DETECTOR_STATUS_OK = 0,
     DETECTOR_STATUS_ERROR,
     DETECTOR_STATUS_SIZE_ERR,
+    DETECTOR_STATUS_EINVAL,
+    DETECTOR_STATUS_ERANGE,
 };
 
+struct detector
+{
+    /* Detector-specific implementation of `detector_detect` */
+    int32_t (*detect)(struct detector *, const float *, float *);
+    int32_t (*init)(struct detector *);
+    int32_t (*get_info)(struct detector *, void **);
+};
+
+#ifdef CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS
 /**
  * Callback type when classifier threshold is met.
  *
@@ -28,37 +41,31 @@ enum detector_status
  */
 typedef void (*detector_cb_t)(void *ctx, float score);
 
-struct detector
+/**
+ * Callback handler manager for anomaly detection.
+ */
+struct detector_classifier
 {
-    /* Detector-specific implementation of `detector_detect` */
-    int32_t (*detect)(struct detector *, const float *, float *);
-    int32_t (*init)(struct detector *);
-    int32_t (*get_info)(struct detector *, void **);
-
-#ifdef CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS
-    /* Anomaly detection callback handler struct members */
-    /** work queue */
-    int8_t is_wq_init;
-    int8_t is_wq_start;
-
+    /** Detector object for this specific classifier */
+    struct detector *detector;
+    struct provider_reader *pr;
     struct k_work_q wq;
-    struct k_work_delayable dw;
+    float buffer[128];
+    struct provider_hdr_entry hdr[128];
 
-    /* Consumer and producer indices for the ring buffer */
-    _Atomic size_t producer_idx, consumer_idx;
+    float threshold;
+    int64_t process_ms;
+
+    struct k_thread thread_data;
+    k_tid_t tid;
 
     /** Number of registered callbacks */
     size_t num_cbs;
     /** Struct containing the registered callbacks */
     detector_cb_t cb_hdlrs[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS];
     void *cb_ctxs[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS];
-
-    /** Thresholds on when the callbacks will be called */
-    int64_t process_ms;
-    float threshold;
-    float wq_buf[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_WORK_Q_RINGBUF_SIZE];
-#endif /* CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS */
 };
+#endif // CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS
 
 extern struct detector g_detector;
 
@@ -91,52 +98,38 @@ static inline int32_t detector_get_info(void *info)
     return g_detector.get_info(&g_detector, info);
 }
 
+#define DETECTOR_DEFAULT_OPTS K_FP_REGS
+
 #ifdef CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS
 /**
- * Initialize the callback-based classifier. After initialization, caller needs to add up to 8
- * callbacks manually.
+ * Initialize the detector classifier struct.
  *
- * @param d            Uninitialized classifier detector object. Need to call `detector_init()` first.
- * @param threshold    Threshold for the logit to be considered an anomaly or not.
- * @param process_ms   The target cadence of the classifier. Scheduling callbacks will take less than this
- *                     in the event that the work handlers take a longer time than `process_ms`.
- * @param smoothing    The smoothing method to use. Currently unused but probably moving averages or
- *                     kalman filter.
+ * @param d                  Initialized detector
+ * @param dc                 Uninitialized detector classifier
+ * @param pr                 Pointer to the initialized provider_reader object
+ * @param processing_delay   Cadence for obtaining new values from the detector.
+ * @param threshold          Probability threshold in (0, 1) to determine whether
+ *                           a score is anomaly or not.
  */
-int32_t detector_classifier_init(struct detector *d, float threshold, int64_t process_ms, int smoothing);
+int32_t detector_classifier_init(struct detector *d, struct detector_classifier *dc, struct provider_reader *pr,
+                                 int64_t processing_delay, float threshold);
 
 /**
- * Start the timer and work queue for the classifier with scheduling priority of `prio`
+ * Start the callback handler in the background.
  *
- * @param d      Initialized classifier detector object. The object shouldn't have been started yet.
- * @param prio   Scheduling priority
+ * @param dc               Initialized classifier object
+ * @param priority         Priority given to thread.
+ * @param thread_opts      Pass `DETECTOR_DEFAULT_OPTS` for the default settings.
+ *                         Otherwise, this contains standard Zephyr thread options.
  */
-int32_t detector_classifier_start(struct detector *d, int prio);
+int32_t detector_classifier_start(struct detector_classifier *dc, int priority, int thread_opts);
 
 /**
- * Shut down and deinitialize the callback-handling system.
+ * Stop the callback handler and cleanup
  *
- * @param d  Initialized detector object
+ * @param dc    classifier object
  */
-int32_t detector_classifier_deinit(struct detector *d);
-
-/**
- * Submit a score/sample logit to the classifier.
- *
- * @param d         Detector object
- * @param sample    Logit detected
- */
-int32_t detector_classifier_submit_sample(struct detector *d, float sample);
-
-/**
- * Submit batched scores/logits to the classifier. The reduces the function call overhead,
- * number of atomic updates, and better memory throughput.
- *
- * @param d         Detector object
- * @param samples   Array of logits/scores
- * @param n_samples The number of samples in `samples` array.
- */
-int32_t detector_classifier_submit_samples_batch(struct detector *d, float *samples, size_t n_samples);
+int32_t detector_classifier_deinit(struct detector_classifier *dc);
 
 /**
  * Register a callback that is run when an anomaly is detected.
@@ -145,14 +138,15 @@ int32_t detector_classifier_submit_samples_batch(struct detector *d, float *samp
  * @param cb     Callback function
  * @param ctx    Opaque context passed to this specific callback.
  */
-int32_t detector_classifier_register_cb(struct detector *d, detector_cb_t cb, void *ctx);
+int32_t detector_classifier_register_cb(struct detector_classifier *dc, detector_cb_t cb, void *ctx);
 
 /**
  * Unregister all callbacks
  *
  * @param d      The detector object
  */
-void detector_classifier_unregister_cb(struct detector *d);
-#endif /* CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS */
+void detector_classifier_unregister_cb(struct detector_classifier *dc);
+
+#endif // CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS
 
 #endif // ANOMALY_LIB_DETECTOR_H

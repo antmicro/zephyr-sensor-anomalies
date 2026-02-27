@@ -71,3 +71,9 @@ config ANOMALY_LIB_DETECTION_CALLBACKS_WORK_Q_RINGBUF_SIZE
     int
     default 128
     depends on ANOMALY_LIB_DETECTION_CALLBACKS
+
+config ANOMALY_LIB_DETECTION_CALLBACKS_HEAPSIZE
+    prompt "size of the heap for callback work queues"
+    int
+    default 2048
+    depends on ANOMALY_LIB_DETECTION_CALLBACKS

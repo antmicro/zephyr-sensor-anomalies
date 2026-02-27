@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include "provider_lib/provider.h"
+#include "provider_lib/providers/sensor.h"
 #include <zephyr/kernel.h>
 
 #include <assert.h>
@@ -14,216 +16,153 @@
 
 #include <anomaly_lib/detector.h>
 
-K_KERNEL_STACK_DEFINE(wq_stack, CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_STACKSIZE);
-
-static inline bool is_anomaly(float threshold, float score) { return score >= threshold; }
-
-static void drain_wq(struct detector *d)
+struct anomaly_ctx
 {
+    struct detector_classifier *dc;
+    struct k_work work;
+    float score;
+};
 
-    /* It's a critical bug if the detector is NULL or started for some reason. Should never happen */
-    assert(d || !d->is_wq_start);
+K_KERNEL_STACK_DEFINE(dc_thread_stack, CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_STACKSIZE);
+K_KERNEL_STACK_DEFINE(dc_wq_stack, CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_STACKSIZE);
+K_HEAP_DEFINE(dc_heap, CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_HEAPSIZE);
 
-    size_t p_idx = atomic_load(&d->producer_idx);
-    size_t c_idx = atomic_load(&d->consumer_idx);
-
-    while (c_idx != p_idx)
+static inline uint64_t time_delta(int64_t *time)
+{
+    uint64_t cur_time = k_uptime_get();
+    int64_t delta64 = cur_time - *time;
+    if (delta64 < 0)
     {
-        // Do not keep c_idx the same too long in case the handler takes too long.
-        // The producer might miss the new value.
-        float val = d->wq_buf[c_idx];
-        c_idx = (c_idx + 1) % CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_WORK_Q_RINGBUF_SIZE;
-        atomic_store(&d->consumer_idx, c_idx);
+        delta64 += UINT32_MAX;
+    }
+    *time = cur_time;
 
-        if (is_anomaly(d->threshold, val))
+    return delta64;
+}
+
+static void dc_launch_callbacks(struct detector_classifier *dc, float score)
+{
+    for (int i = 0; i < dc->num_cbs; ++i)
+    {
+        (dc->cb_hdlrs[i])(dc->cb_ctxs[i], score);
+    }
+}
+
+static void dc_anomaly_worker(struct k_work *work)
+{
+    struct anomaly_ctx *anomaly_ctx = CONTAINER_OF(work, struct anomaly_ctx, work);
+
+    dc_launch_callbacks(anomaly_ctx->dc, anomaly_ctx->score);
+
+    k_heap_free(&dc_heap, anomaly_ctx);
+}
+
+static void detector_classifier_thread_entry(struct detector_classifier *dc, void *p2, void *p3)
+{
+    UNUSED(p2);
+    UNUSED(p3);
+    int32_t status;
+    int64_t t_elapsed, t_start;
+
+    float score;
+
+    while (1)
+    {
+        t_start = k_uptime_get();
+        status = provider_reader_read_all(dc->pr, dc->buffer);
+        if (status)
         {
-            for (size_t i = 0; i < d->num_cbs; ++i)
+            /* Some error */
+            return;
+        }
+
+        status = detector_detect(dc->buffer, &score);
+        if (status)
+        {
+            return;
+        }
+
+        if (score >= dc->threshold)
+        {
+            /* Is an anomaly. Launch all callbacks */
+            /* struct anomaly_ctx anomaly_ctx; */
+            struct anomaly_ctx *anomaly_ctx = k_heap_alloc(&dc_heap, sizeof(struct anomaly_ctx), K_NO_WAIT);
+            if (anomaly_ctx)
             {
-                (d->cb_hdlrs[i])(d->cb_ctxs[i], val);
+                anomaly_ctx->dc = dc;
+                anomaly_ctx->score = score;
+                k_work_init(&anomaly_ctx->work, dc_anomaly_worker);
+                k_work_submit_to_queue(&dc->wq, &anomaly_ctx->work);
+            }
+            else
+            {
+                /* Using this thread to launch callbacks because heap is full */
+                dc_launch_callbacks(dc, score);
             }
         }
 
-        // Refresh p_idx value in case it has changed.
-        p_idx = atomic_load(&d->producer_idx);
+        t_elapsed = time_delta(&t_start);
+        int64_t to_wait = dc->process_ms - t_elapsed;
+        if (to_wait > 0)
+        {
+            k_msleep(to_wait);
+        }
+        else
+        {
+            printk("Detection too slow: %lld\n", to_wait);
+        }
     }
 }
 
-static void detector_work_handler(struct k_work_delayable *work)
+int32_t detector_classifier_init(struct detector *d, struct detector_classifier *dc, struct provider_reader *pr,
+                                 int64_t processing_delay, float threshold)
 {
-    struct detector *d = CONTAINER_OF(work, struct detector, dw);
-
-    /* It's a critical bug if the container is NULL. Should never happen */
-    assert(d);
-
-    int64_t start = k_uptime_get();
-
-    /* Batched processing */
-    drain_wq(d);
-
-    int64_t elapsed = k_uptime_get() - start;
-    int64_t next = d->process_ms - (int32_t)elapsed;
-
-    /* We're behind. Catch up! */
-    if (next <= 0)
-    {
-        k_work_schedule_for_queue(&d->wq, &d->dw, K_NO_WAIT);
-    }
-    else
-    {
-        k_work_schedule_for_queue(&d->wq, &d->dw, K_MSEC(next));
-    }
-}
-
-int32_t detector_classifier_submit_samples_batch(struct detector *d, float *samples, size_t n_samples)
-{
-    if (!d || !d->is_wq_start || n_samples == 0)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
 
     int32_t status = DETECTOR_STATUS_OK;
 
-    size_t p_idx = atomic_load(&d->producer_idx);
-    size_t c_idx = atomic_load(&d->consumer_idx);
-
-    const size_t RING_SIZE = CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_WORK_Q_RINGBUF_SIZE;
-    size_t used = p_idx - c_idx;
-    size_t free_space = RING_SIZE - used;
-    if (free_space < n_samples)
+    if (!d || !dc || !pr)
     {
-        /* Not enough space for the new values. Reject */
-        return -DETECTOR_STATUS_ERROR;
+        return -DETECTOR_STATUS_EINVAL;
     }
 
-    size_t contiguous = RING_SIZE - (p_idx % RING_SIZE);
-    size_t first = (n_samples <= contiguous) ? n_samples : contiguous;
-    size_t remaining = n_samples - first;
+    dc->detector = d;
+    dc->threshold = threshold;
+    dc->process_ms = processing_delay;
+    dc->pr = pr;
 
-    memcpy(d->wq_buf + (p_idx % RING_SIZE), samples, first * sizeof *d->wq_buf);
-
-    if (remaining > 0)
+    if (sizeof(dc->buffer) / sizeof(dc->buffer[0]) < pr->dst_N)
     {
-        memcpy(d->wq_buf, samples + first, remaining * sizeof *d->wq_buf);
+        /* Insufficient buffer size */
+        return -DETECTOR_STATUS_ERANGE;
     }
 
-    p_idx = (p_idx + n_samples) % RING_SIZE;
-    atomic_store(&d->producer_idx, p_idx);
+    k_work_queue_init(&dc->wq);
+    k_work_queue_start(&dc->wq, dc_wq_stack, K_THREAD_STACK_SIZEOF(dc_wq_stack), 5, NULL);
 
     return status;
 }
 
-int32_t detector_classifier_submit_sample(struct detector *d, float sample)
+int32_t detector_classifier_deinit(struct detector_classifier *dc) { return -DETECTOR_STATUS_ERROR; }
+
+int32_t detector_classifier_register_cb(struct detector_classifier *dc, detector_cb_t cb, void *ctx)
 {
-    if (!d || !d->is_wq_start)
+    if (!dc || !cb)
     {
-        return -DETECTOR_STATUS_ERROR;
+        return -DETECTOR_STATUS_EINVAL;
     }
 
-    size_t p = atomic_load(&d->producer_idx);
-    size_t next = (p + 1) % CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_WORK_Q_RINGBUF_SIZE;
-
-    /* Ring buffer riched its tail. There's no more space. */
-    if (next == d->consumer_idx)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
-
-    d->wq_buf[p] = sample;
-    atomic_store(&d->producer_idx, next);
-    return DETECTOR_STATUS_OK;
-}
-
-int32_t detector_classifier_init(struct detector *d, float threshold, int64_t process_ms, int smoothing)
-{
-    ARG_UNUSED(smoothing);
-    if (!d || d->is_wq_init)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
-
-    if (process_ms < 1)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
-
-    if (threshold <= 0.0f || threshold >= 1.0f)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
-
-    atomic_store(&d->producer_idx, 0);
-    d->consumer_idx = 0;
-
-    k_work_init_delayable(&d->dw, (k_work_handler_t)detector_work_handler);
-
-    d->threshold = threshold;
-    d->process_ms = process_ms;
-
-    d->is_wq_init = 1;
-    d->is_wq_start = 0;
-
-    return 0;
-}
-
-int32_t detector_classifier_deinit(struct detector *d)
-{
-    if (!d || !d->is_wq_init)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
-
-    k_work_cancel_delayable_sync(&d->dw, (struct k_work_sync *)&d->wq);
-    int32_t status = k_work_queue_stop(&d->wq, K_FOREVER);
-
-    if (status < 0)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
-
-    return DETECTOR_STATUS_OK;
-}
-
-int32_t detector_classifier_start(struct detector *d, int prio)
-{
-    int status = 0;
-    if (!d || !d->is_wq_init || d->is_wq_start)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
-
-    k_work_queue_start(&d->wq, wq_stack, K_KERNEL_STACK_SIZEOF(wq_stack), prio, NULL);
-    /* Schedule the first job. Do not wait. We maintain an independent
-       timer from the caller */
-    status = k_work_schedule_for_queue(&d->wq, &d->dw, K_NO_WAIT);
-    if (status < 0)
-    {
-        k_work_queue_stop(&d->wq, K_NO_WAIT);
-        return -DETECTOR_STATUS_ERROR;
-    }
-    d->is_wq_start = 1;
-
-    return DETECTOR_STATUS_OK;
-}
-
-int32_t detector_classifier_register_cb(struct detector *d, detector_cb_t cb, void *ctx)
-{
-    if (!d || !cb)
-    {
-        return -DETECTOR_STATUS_ERROR;
-    }
-
-    if (d->num_cbs >= CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS - 1)
+    if (dc->num_cbs >= CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS - 1)
     {
         return -DETECTOR_STATUS_SIZE_ERR;
     }
 
-    d->cb_ctxs[d->num_cbs] = ctx;
-    d->cb_hdlrs[d->num_cbs++] = cb;
+    dc->cb_ctxs[dc->num_cbs] = ctx;
+    dc->cb_hdlrs[dc->num_cbs++] = cb;
 
     return DETECTOR_STATUS_OK;
 }
 
-void dector_classifier_unregister_cb(struct detector *d)
+void dector_classifier_unregister_cb(struct detector_classifier *d)
 {
     if (!d)
     {
@@ -237,4 +176,22 @@ void dector_classifier_unregister_cb(struct detector *d)
     }
 
     d->num_cbs = 0;
+}
+
+int32_t detector_classifier_start(struct detector_classifier *dc, int priority, int thread_opts)
+{
+    if (!dc)
+    {
+        return -DETECTOR_STATUS_EINVAL;
+    }
+
+    dc->tid = k_thread_create(&dc->thread_data, dc_thread_stack, K_THREAD_STACK_SIZEOF(dc_thread_stack),
+                              detector_classifier_thread_entry, dc, NULL, NULL, priority, thread_opts, K_NO_WAIT);
+    if (!dc->tid)
+    {
+        // Failed to spawn thread
+        return -DETECTOR_STATUS_ERROR;
+    }
+
+    return DETECTOR_STATUS_OK;
 }
