@@ -6,6 +6,7 @@
 
 #include "provider_lib/provider.h"
 #include "provider_lib/providers/sensor.h"
+#include "zephyr/arch/arch_interface.h"
 #include <zephyr/kernel.h>
 
 #include <assert.h>
@@ -63,10 +64,9 @@ static void detector_classifier_thread_entry(struct detector_classifier *dc, voi
     UNUSED(p3);
     int32_t status;
     int64_t t_elapsed, t_start;
-
     float score;
 
-    while (1)
+    while (atomic_get(&dc->deinit_started) == 0)
     {
         t_start = k_uptime_get();
         status = provider_reader_read_all(dc->pr, dc->buffer);
@@ -136,13 +136,33 @@ int32_t detector_classifier_init(struct detector *d, struct detector_classifier 
         return -DETECTOR_STATUS_ERANGE;
     }
 
+    dc->deinit_started = ATOMIC_INIT(0);
+
     k_work_queue_init(&dc->wq);
     k_work_queue_start(&dc->wq, dc_wq_stack, K_THREAD_STACK_SIZEOF(dc_wq_stack), 5, NULL);
 
     return status;
 }
 
-int32_t detector_classifier_deinit(struct detector_classifier *dc) { return -DETECTOR_STATUS_ERROR; }
+int32_t detector_classifier_deinit(struct detector_classifier *dc)
+{
+    if (!dc)
+    {
+        return -DETECTOR_STATUS_EINVAL;
+    }
+
+    if (atomic_get(&dc->deinit_started) > 0)
+    {
+        return DETECTOR_STATUS_OK;
+    }
+
+    atomic_set(&dc->deinit_started, 1);
+
+    k_work_queue_stop(&dc->wq, K_FOREVER);
+    k_thread_join(dc->tid, K_FOREVER);
+
+    return -DETECTOR_STATUS_ERROR;
+}
 
 int32_t detector_classifier_register_cb(struct detector_classifier *dc, detector_cb_t cb, void *ctx)
 {
@@ -186,7 +206,8 @@ int32_t detector_classifier_start(struct detector_classifier *dc, int priority, 
     }
 
     dc->tid = k_thread_create(&dc->thread_data, dc_thread_stack, K_THREAD_STACK_SIZEOF(dc_thread_stack),
-                              detector_classifier_thread_entry, dc, NULL, NULL, priority, thread_opts, K_NO_WAIT);
+                              (k_thread_entry_t)detector_classifier_thread_entry, dc, NULL, NULL, priority, thread_opts,
+                              K_NO_WAIT);
     if (!dc->tid)
     {
         // Failed to spawn thread

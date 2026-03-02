@@ -14,10 +14,7 @@ Should Display Sensors Test
     Start Emulation
 
     Wait For Line on UART    Anomaly detected with probability 0.99963
-    Wait For Line on UART    [prefix_str] Anomaly detected with probability 0.99963
     Wait For Line on UART    Anomaly detected with probability 1.00000
-    Wait For Line on UART    [prefix_str] Anomaly detected with probability 1.00000
     Wait For Line on UART    Anomaly detected with probability 0.99963
-    Wait For Line on UART    [prefix_str] Anomaly detected with probability 0.99963
     Wait For Line on UART    Anomaly detected with probability 1.00000
-    Wait For Line on UART    [prefix_str] Anomaly detected with probability 1.00000
+    Wait For Line on UART    Successfully shut down classifier

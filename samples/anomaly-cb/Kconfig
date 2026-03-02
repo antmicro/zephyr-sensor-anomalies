@@ -26,6 +26,9 @@ config CLASSIFIER_SAMPLES_BATCHSIZE
     default 16
     depends on CLASSIFIER_SAMPLES_BATCHED
 
+config MAX_ANOMALY_COUNT
+    int "The maximum number of anomalies to be detected before exit during test (default 0 means unlimited)"
+    default 0
 
 module = APP
 module-str = app

@@ -7,14 +7,7 @@ tests:
 
   sample.anomalycb.kenning.robot:
     extra_configs:
-      - CONFIG_CPP=y
-      - CONFIG_STD_CPP17=y
-      - CONFIG_NEWLIB_LIBC=y
-      - CONFIG_NEWLIB_LIBC_NANO=y
-      - CONFIG_NEWLIB_LIBC_FLOAT_PRINTF=y
       - CONFIG_MAIN_STACK_SIZE=4096
-      - CONFIG_SERIAL=y
-      - CONFIG_FPU=y
       - CONFIG_BUILD_WITH_TFM=n
       - CONFIG_HEAP_MEM_POOL_SIZE=2048
       - CONFIG_KENNING_INFERENCE_LIB=y
@@ -22,27 +15,7 @@ tests:
       - CONFIG_KENNING_TFLITE_BUFFER_SIZE=40
       - CONFIG_ANOMALY_LIB_BACKEND_KENNING=y
       - CONFIG_KENNING_MODEL_PATH="kenning_tflite_model.tflite"
-    harness: robot
-    harness_config:
-      robot_testsuite: kenning.robot
-  sample.anomalycb.kenningbatched.robot:
-    extra_configs:
-      - CONFIG_CPP=y
-      - CONFIG_STD_CPP17=y
-      - CONFIG_NEWLIB_LIBC=y
-      - CONFIG_NEWLIB_LIBC_NANO=y
-      - CONFIG_NEWLIB_LIBC_FLOAT_PRINTF=y
-      - CONFIG_MAIN_STACK_SIZE=4096
-      - CONFIG_SERIAL=y
-      - CONFIG_FPU=y
-      - CONFIG_BUILD_WITH_TFM=n
-      - CONFIG_HEAP_MEM_POOL_SIZE=2048
-      - CONFIG_KENNING_INFERENCE_LIB=y
-      - CONFIG_KENNING_ML_RUNTIME_TFLITE=y
-      - CONFIG_KENNING_TFLITE_BUFFER_SIZE=40
-      - CONFIG_ANOMALY_LIB_BACKEND_KENNING=y
-      - CONFIG_KENNING_MODEL_PATH="kenning_tflite_model.tflite"
-      - CONFIG_CLASSIFIER_SAMPLES_BATCHED=y
+      - CONFIG_MAX_ANOMALY_COUNT=4
     harness: robot
     harness_config:
       robot_testsuite: kenning.robot

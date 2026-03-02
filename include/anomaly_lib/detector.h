@@ -49,6 +49,7 @@ struct detector_classifier
     /** Detector object for this specific classifier */
     struct detector *detector;
     struct provider_reader *pr;
+    atomic_t deinit_started;
     struct k_work_q wq;
     float buffer[128];
     struct provider_hdr_entry hdr[128];

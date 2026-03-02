@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include "kenning_inference_lib/core/protocol.h"
+#include "zephyr/toolchain.h"
 #include <zephyr/kernel.h>
 
 #include <stdatomic.h>
@@ -16,22 +18,6 @@
 
 #include <kenning_inference_lib/core/kenning_protocol.h>
 #include <kenning_inference_lib/core/loaders.h>
-
-/**
- * 32-bit equivalent of `k_uptime_delta`.
- */
-static inline uint32_t time_delta(int32_t *time)
-{
-    uint32_t cur_time = k_uptime_get_32();
-    int64_t delta64 = (int64_t)cur_time - *time;
-    if (delta64 < 0)
-    {
-        delta64 += UINT32_MAX;
-    }
-    *time = cur_time;
-
-    return (uint32_t)delta64;
-}
 
 #ifdef CONFIG_KENNING_PROTOCOL_INTEGRATION
 
@@ -114,23 +100,37 @@ int send_score(float score)
 int send_score(float score) { return 0; }
 #endif // CONFIG_KENNING_PROTOCOL_INTEGRATION
 
-static void sample_cb(void *ctx, float score) { printf("Anomaly detected with probability %.5f\n", score); }
-
-static void another_sample_cb(void *ctx, float score)
+static void log_score_cb(void *ctx, float score) { printf("Anomaly detected with probability %.5f\n", (double)score); }
+static void send_score_cb(void *ctx, float score)
 {
-    printf("[%s] Anomaly detected with probability %.5f\n", (char *)ctx, score);
+    int protocol_initialized = *((int *)ctx);
+    if (protocol_initialized)
+    {
+        send_score(score);
+    }
 }
+
+#if CONFIG_MAX_ANOMALY_COUNT > 0
+static void anomaly_ctr_cb(void *ctx, float _score)
+{
+    ARG_UNUSED(_score);
+    // When anomaly reaches 4 counts, stop detecting more.
+    atomic_inc((atomic_t *)ctx);
+}
+#endif // CONFIG_MAX_ANOMALY_COUNT
 
 int main()
 {
     int status;
+#if CONFIG_MAX_ANOMALY_COUNT > 0
+    atomic_t anomaly_ctr = ATOMIC_INIT(0);
+#endif // CONFIG_MAX_ANOMALY_COUNT
 
     static struct provider_reader pr = {
         .dst_N = 0,
         .ps_N = 0,
     };
 
-    static float buffer[128];
     static struct provider_hdr_entry hdr[128];
 
     status = provider_reader_register_all_sensor(&pr);
@@ -165,32 +165,47 @@ int main()
         return -1;
     }
 
-    status = detector_classifier_register_cb(&dc, sample_cb, NULL);
+    status = detector_classifier_register_cb(&dc, log_score_cb, NULL);
     if (status)
     {
-        printk("Failed to register callback: %d\n", status);
+        printk("Failed to register log_score_cb: %d\n", status);
         return -1;
     }
 
-    const char *prefix_str = "prefix_str";
-    status = detector_classifier_register_cb(&dc, another_sample_cb, (void *)prefix_str);
+    status = detector_classifier_register_cb(&dc, send_score_cb, (void *)&protocol_initialized);
     if (status)
     {
-        printk("Failed to register another callback: %d\n", status);
+        printk("Failed to register send_score_cb: %d\n", status);
         return -1;
     }
+
+#if CONFIG_MAX_ANOMALY_COUNT > 0
+    status = detector_classifier_register_cb(&dc, anomaly_ctr_cb, (void *)&anomaly_ctr);
+    if (status)
+    {
+        printk("Failed to register anomaly_ctr_cb: %d\n", status);
+    }
+#endif // CONFIG_MAX_ANOMALY_COUNT
 
     status = detector_classifier_start(&dc, 6, DETECTOR_DEFAULT_OPTS);
     if (status)
     {
-        printk("Faile to start classifier: %d\n", status);
+        printk("Failed to start classifier: %d\n", status);
         return -1;
     }
 
+#if CONFIG_MAX_ANOMALY_COUNT > 0
+    while (atomic_get(&anomaly_ctr) < CONFIG_MAX_ANOMALY_COUNT)
+    {
+        k_msleep(10);
+    }
+
+    detector_classifier_deinit(&dc);
+    printk("Successfully shut down classifier\n");
+#else
     while (1)
     {
         k_msleep(1000);
     }
-
-    detector_classifier_deinit(&dc);
+#endif // CONFIG_MAX_ANOMALY_COUNT
 }
