@@ -151,17 +151,13 @@ int32_t detector_classifier_deinit(struct detector_classifier *dc)
         return -DETECTOR_STATUS_EINVAL;
     }
 
-    if (atomic_get(&dc->deinit_started) > 0)
+    if (atomic_cas(&dc->deinit_started, 0, 1) == 0)
     {
-        return DETECTOR_STATUS_OK;
+        k_work_queue_stop(&dc->wq, K_FOREVER);
+        k_thread_join(dc->tid, K_FOREVER);
     }
 
-    atomic_set(&dc->deinit_started, 1);
-
-    k_work_queue_stop(&dc->wq, K_FOREVER);
-    k_thread_join(dc->tid, K_FOREVER);
-
-    return -DETECTOR_STATUS_ERROR;
+    return DETECTOR_STATUS_OK;
 }
 
 int32_t detector_classifier_register_cb(struct detector_classifier *dc, detector_cb_t cb, void *ctx)

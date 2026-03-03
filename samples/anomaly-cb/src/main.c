@@ -100,7 +100,14 @@ int send_score(float score)
 int send_score(float score) { return 0; }
 #endif // CONFIG_KENNING_PROTOCOL_INTEGRATION
 
+/**
+ * Basic logging callback.
+ */
 static void log_score_cb(void *ctx, float score) { printf("Anomaly detected with probability %.5f\n", (double)score); }
+
+/**
+ * Callback to send score using kenning protocol.
+ */
 static void send_score_cb(void *ctx, float score)
 {
     int protocol_initialized = *((int *)ctx);
@@ -111,10 +118,14 @@ static void send_score_cb(void *ctx, float score)
 }
 
 #if CONFIG_MAX_ANOMALY_COUNT > 0
+/**
+ * Callback to check if CONFIG_MAX_ANOMALY_COUNT has been reached.
+ * If so, stop detecting more anomalies and shut down the application.
+ * Used for automated tests.
+ */
 static void anomaly_ctr_cb(void *ctx, float _score)
 {
     ARG_UNUSED(_score);
-    // When anomaly reaches 4 counts, stop detecting more.
     atomic_inc((atomic_t *)ctx);
 }
 #endif // CONFIG_MAX_ANOMALY_COUNT
