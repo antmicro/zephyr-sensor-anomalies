@@ -6,7 +6,7 @@
 
 set -e
 
-curl https://builds.renode.io/renode-latest.linux-portable-dotnet.tar.gz -o renode-latest.tar.gz
+curl https://builds.renode.io/renode-latest.linux-portable.tar.gz -o renode-latest.tar.gz
 tar -xf renode-latest.tar.gz
 rm -f renode-latest.tar.gz
-mv -f renode_*-dotnet_portable renode_latest
+mv -f renode_*-portable renode_latest
