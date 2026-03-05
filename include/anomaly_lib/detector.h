@@ -15,6 +15,12 @@
 
 #include <provider_lib/provider.h>
 
+/**
+ * No smoothing used for anomaly detection.
+ */
+#define DETECTOR_SMOOTHING_NONE NULL
+#define DETECTOR_SMOOTHING_EXP_SMOOTHING detector_smoothing_exp_smoothing
+
 enum detector_status
 {
     DETECTOR_STATUS_OK = 0,
@@ -23,6 +29,8 @@ enum detector_status
     DETECTOR_STATUS_EINVAL,
     DETECTOR_STATUS_ERANGE,
 };
+
+struct detector_classifier;
 
 struct detector
 {
@@ -40,6 +48,19 @@ struct detector
  * @param score  Logit output of the classifier.
  */
 typedef void (*detector_cb_t)(void *ctx, float score);
+
+/**
+ * Type for the smoothing function.
+ */
+typedef float (*detector_smoothing_cb_t)(struct detector_classifier *dc, float score, void *ctx);
+
+struct detector_smoothing_opts_exp_mav
+{
+    /** Value between 0 and 1. */
+    float smoothing_factor;
+};
+
+float detector_smoothing_exp_smoothing(struct detector_classifier *dc, float score, void *ctx);
 
 /**
  * Callback handler manager for anomaly detection.
@@ -65,6 +86,21 @@ struct detector_classifier
     /** Struct containing the registered callbacks */
     detector_cb_t cb_hdlrs[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS];
     void *cb_ctxs[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS];
+
+    /** Smoothing function */
+    detector_smoothing_cb_t smoothing;
+    /** Current value of the moving average */
+    float smoothed_moving_average;
+    /** Indicator whether smoothing started. Used to prevent initializing
+        `smoothing_score` to some absurd number such as 0 or NaN. */
+    bool smoothing_started;
+
+    /** Options for the smoothing average. Needs to be set after
+        calling `detector_classifier_init` */
+    union
+    {
+        struct detector_smoothing_opts_exp_mav exp_moving_avg_opts;
+    };
 };
 #endif // CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS
 
@@ -108,12 +144,15 @@ static inline int32_t detector_get_info(void *info)
  * @param d                  Initialized detector
  * @param dc                 Uninitialized detector classifier
  * @param pr                 Pointer to the initialized provider_reader object
+ * @param smoothing          Function used for smoothing scores. Possible values are:
+ *                           - DETECTOR_SMOOTHING_NONE - no smoothing.
+ *                           - DETECTOR_SMOOTHING_EXP_SMOOTHING - exponential smoothing.
  * @param processing_delay   Cadence for obtaining new values from the detector.
  * @param threshold          Probability threshold in (0, 1) to determine whether
  *                           a score is anomaly or not.
  */
 int32_t detector_classifier_init(struct detector *d, struct detector_classifier *dc, struct provider_reader *pr,
-                                 int64_t processing_delay, float threshold);
+                                 detector_smoothing_cb_t smoothing, int64_t processing_delay, float threshold);
 
 /**
  * Start the callback handler in the background.

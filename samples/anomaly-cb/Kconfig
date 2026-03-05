@@ -16,19 +16,21 @@ config PROCESSING_DELAY
     default 50
     depends on PROVIDER_LIB && ANOMALY_LIB
 
-config CLASSIFIER_SAMPLES_BATCHED
-    bool "Batch the number of samples when sending to the classifier"
+config CLASSIFIER_USE_EXP_MOVING_AVERAGES
+    bool "Use exponential moving averages for smoothing values"
     default n
-    depends on PROVIDER_LIB && ANOMALY_LIB
+    depends on ANOMALY_LIB
 
-config CLASSIFIER_SAMPLES_BATCHSIZE
-    int "Size of each batch when sending to the classifier"
-    default 16
-    depends on CLASSIFIER_SAMPLES_BATCHED
+config CLASSIFIER_EXP_MOVING_AVERAGES_SMOOTHING_PERCENT
+    int "alpha smoothing factor for exponential smoothing"
+    default 30
+    depends on CLASSIFIER_USE_EXP_MOVING_AVERAGES
 
 config MAX_ANOMALY_COUNT
     int "The maximum number of anomalies to be detected before exit during test (default 0 means unlimited)"
     default 0
+
+
 
 module = APP
 module-str = app

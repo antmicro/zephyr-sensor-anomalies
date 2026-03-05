@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "provider_lib/provider.h"
-#include "provider_lib/providers/sensor.h"
-#include "zephyr/arch/arch_interface.h"
 #include <zephyr/kernel.h>
 
 #include <assert.h>
@@ -14,6 +11,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
+
+#include <math.h>
 
 #include <anomaly_lib/detector.h>
 
@@ -41,6 +40,14 @@ static inline uint64_t time_delta(int64_t *time)
     return delta64;
 }
 
+static float exponential_smoothing(float alpha, float current, float previous_smooth)
+{
+    float t1 = alpha * current;
+    float t2 = (1 - alpha) * previous_smooth;
+
+    return t1 + t2;
+}
+
 static void dc_launch_callbacks(struct detector_classifier *dc, float score)
 {
     for (int i = 0; i < dc->num_cbs; ++i)
@@ -62,9 +69,11 @@ static void detector_classifier_thread_entry(struct detector_classifier *dc, voi
 {
     UNUSED(p2);
     UNUSED(p3);
+
     int32_t status;
     int64_t t_elapsed, t_start;
     float score;
+    bool is_anomaly = false;
 
     while (atomic_get(&dc->deinit_started) == 0)
     {
@@ -82,23 +91,35 @@ static void detector_classifier_thread_entry(struct detector_classifier *dc, voi
             return;
         }
 
-        if (score >= dc->threshold)
+        float smoothed_score = score;
+
+        if (dc->smoothing != DETECTOR_SMOOTHING_NONE)
+        {
+            smoothed_score = (dc->smoothing)(dc, score, NULL);
+        }
+
+        if (smoothed_score >= dc->threshold && !is_anomaly)
         {
             /* Is an anomaly. Launch all callbacks */
-            /* struct anomaly_ctx anomaly_ctx; */
             struct anomaly_ctx *anomaly_ctx = k_heap_alloc(&dc_heap, sizeof(struct anomaly_ctx), K_NO_WAIT);
             if (anomaly_ctx)
             {
                 anomaly_ctx->dc = dc;
-                anomaly_ctx->score = score;
+                anomaly_ctx->score = smoothed_score;
                 k_work_init(&anomaly_ctx->work, dc_anomaly_worker);
                 k_work_submit_to_queue(&dc->wq, &anomaly_ctx->work);
             }
             else
             {
                 /* Using this thread to launch callbacks because heap is full */
-                dc_launch_callbacks(dc, score);
+                dc_launch_callbacks(dc, smoothed_score);
             }
+
+            is_anomaly = true;
+        }
+        else if (smoothed_score < dc->threshold)
+        {
+            is_anomaly = false;
         }
 
         t_elapsed = time_delta(&t_start);
@@ -115,7 +136,7 @@ static void detector_classifier_thread_entry(struct detector_classifier *dc, voi
 }
 
 int32_t detector_classifier_init(struct detector *d, struct detector_classifier *dc, struct provider_reader *pr,
-                                 int64_t processing_delay, float threshold)
+                                 detector_smoothing_cb_t smoothing, int64_t processing_delay, float threshold)
 {
 
     int32_t status = DETECTOR_STATUS_OK;
@@ -137,6 +158,8 @@ int32_t detector_classifier_init(struct detector *d, struct detector_classifier 
     }
 
     dc->deinit_started = ATOMIC_INIT(0);
+    dc->smoothing = smoothing;
+    dc->smoothing_started = false;
 
     k_work_queue_init(&dc->wq);
     k_work_queue_start(&dc->wq, dc_wq_stack, K_THREAD_STACK_SIZEOF(dc_wq_stack), 5, NULL);
@@ -201,6 +224,16 @@ int32_t detector_classifier_start(struct detector_classifier *dc, int priority, 
         return -DETECTOR_STATUS_EINVAL;
     }
 
+    if (dc->smoothing == DETECTOR_SMOOTHING_EXP_SMOOTHING)
+    {
+        // Validate alpha to be in the range (0, 1)
+        float alpha = dc->exp_moving_avg_opts.smoothing_factor;
+        if (alpha <= 0.0f && alpha >= 1.0f)
+        {
+            return -DETECTOR_STATUS_ERANGE;
+        }
+    }
+
     dc->tid = k_thread_create(&dc->thread_data, dc_thread_stack, K_THREAD_STACK_SIZEOF(dc_thread_stack),
                               (k_thread_entry_t)detector_classifier_thread_entry, dc, NULL, NULL, priority, thread_opts,
                               K_NO_WAIT);
@@ -211,4 +244,26 @@ int32_t detector_classifier_start(struct detector_classifier *dc, int priority, 
     }
 
     return DETECTOR_STATUS_OK;
+}
+
+float detector_smoothing_exp_smoothing(struct detector_classifier *dc, float score, void *ctx)
+{
+    ARG_UNUSED(ctx);
+    if (!dc)
+    {
+        return NAN;
+    }
+
+    if (!dc->smoothing_started)
+    {
+        dc->smoothing_started = true;
+        dc->smoothed_moving_average = score;
+        return score;
+    }
+
+    float smoothed_value =
+        exponential_smoothing(dc->exp_moving_avg_opts.smoothing_factor, score, dc->smoothed_moving_average);
+
+    dc->smoothed_moving_average = smoothed_value;
+    return smoothed_value;
 }

@@ -169,7 +169,13 @@ int main()
 
     struct detector_classifier dc = {0};
 
-    status = detector_classifier_init(&g_detector, &dc, &pr, 100, 0.5);
+#ifdef CONFIG_CLASSIFIER_USE_EXP_MOVING_AVERAGES
+    status = detector_classifier_init(&g_detector, &dc, &pr, DETECTOR_SMOOTHING_EXP_SMOOTHING, 100, 0.5);
+    dc.exp_moving_avg_opts.smoothing_factor = (float)CONFIG_CLASSIFIER_EXP_MOVING_AVERAGES_SMOOTHING_PERCENT / 100.0f;
+#else
+    status = detector_classifier_init(&g_detector, &dc, &pr, DETECTOR_SMOOTHING_NONE, 100, 0.5);
+#endif
+
     if (status)
     {
         printk("Classifier init failed: %d\n", status);
