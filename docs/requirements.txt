@@ -1,0 +1,6 @@
+antmicro-sphinx-utils @ git+https://github.com/antmicro/antmicro-sphinx-utils.git
+docutils
+sphinxcontrib-napoleon
+sphinx>=8.1.3; python_version<='3.11'
+sphinx>=8.2.3; python_version>'3.11'
+breathe>=4.36

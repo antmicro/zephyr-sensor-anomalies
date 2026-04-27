@@ -3,7 +3,7 @@
   - ACCEL_Y
   - ACCEL_Z
 
-- adi_axl345:
+- adi_adxl345:
   - ACCEL_X
   - ACCEL_Y
   - ACCEL_Z

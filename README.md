@@ -6,10 +6,10 @@ Zephyr Sensor Anomalies is a [Zephyr RTOS](https://www.zephyrproject.org/) libra
 
 It provides tools for:
 
-* Reading data from sensors and using it to generate datasets
-* Setting up analysis of sensor readings using neural networks, kNN, decision trees, etc.
-* Setting up callbacks on detected anomalies
-* Evaluating anomaly detection using the [Kenning](https://kenning.ai) framework
+* reading data from sensors and using it to generate datasets,
+* setting up analysis of sensor readings using neural networks, kNN, decision trees, etc.,
+* setting up callbacks on detected anomalies,
+* evaluating anomaly detection using the [Kenning](https://kenning.ai) framework.
 
 ## Installing dependencies
 
@@ -61,8 +61,8 @@ First, build the application:
 west build -p -b stm32f746g_disco samples/sensors
 ```
 
-The application could be ran on real hardware and collect actual sensor readings.
-However, for the purposes of this demonstration, we will use the `run_renode.py` script to launch a [Renode](https://renode.io) simulation, and feed data from a CSV file to the simulated sensors.
+The application can be run on physical hardware and collect actual sensor readings.
+However, for the purposes of this demonstration, we will use the `run_renode.py` script to launch a [Renode](https://renode.io/) simulation and feed data from a CSV file to the simulated sensors.
 
 For that, download sample data:
 
@@ -70,7 +70,7 @@ For that, download sample data:
 curl https://dl.antmicro.com/kenning/datasets/anomaly_detection/minispot.csv -o data.csv
 ```
 
-For this demonstration, we will require Renode to run the simulation.
+For this demonstration, Renode will be required to run the simulation.
 Download Renode and export environmental variables pointing to its location:
 
 ```bash
@@ -95,8 +95,9 @@ To do that, modify functions `prepare_repl` in `gen_repl.py` and `get_sensors` i
 
 #### Creating an anomaly detection model
 
-We will train an example Kenning PyTorch model, defined in `workflows/minispot/model.py`, which will be a simple binary classifier.
-We can use a Kenning scenario (a YAML file with Kenning configuration) from one of the example `workflows` provided with this repository.
+An example Kenning PyTorch model will be trained, defined in `workflows/minispot/model.py`.
+It will be a simple binary classifier.
+A Kenning scenario (a YAML file with Kenning configuration) from one of the example `workflows` provided with this repository can be used.
 
 The model will be trained with a labeled dataset, which is automatically downloaded by Kenning from `https://dl.antmicro.com/kenning/datasets/anomaly_detection/minispot.csv`.
 
@@ -114,7 +115,7 @@ kenning optimize --cfg scenario.yml
 This will generate two files: `fp32.1.tflite` and `fp32.1.tflite.json`.
 Both files will be saved in `build`.
 
-To run this model, we can use another example application - `samples/anomaly`.
+To run this model, another example application may be used - `samples/anomaly`.
 The previously used `samples/sensors` prints the sensor outputs to UART; `samples/anomaly` will run these outputs through the given model.
 
 The Zephyr Sensor Anomalies library will take care of data pre-processing (creating a sliding window) and post-processing ("smoothing" the output by removing outliers and using output from the binary classifier to compute an "anomaly metric").
@@ -181,7 +182,8 @@ All you need to do is change the structure of the model in the `model.py` file.
 
 #### Evaluating the model in Kenning
 
-The `samples/anomaly` application supports Kenning Protocol. Because of that, it can be used for not only training and optimization, but also for evaluating the accuracy of the model and generating a report with Kenning.
+The `samples/anomaly` application supports Kenning Protocol.
+Because of that, it can be used for not only training and optimization, but also for evaluating the accuracy of the model and generating a report with Kenning.
 
 For that, first build the application with Kenning Protocol integration enabled.
 To achieve that, the value of `DCONFIG_KENNING_PROTOCOL_INTEGRATION` is changed:
@@ -195,8 +197,8 @@ west build -p -b stm32f746g_disco samples/anomaly -- \
     -DCONFIG_KENNING_MODEL_PATH=\"$(realpath ./workflows/minispot/build/fp32.1.tflite)\"
 ```
 
-In previous examples, we used the `run_renode.py` script, which generated a Renode `.repl` file (describing the simulated platform) in the `/tmp` directory, for the board based on the Zephyr DTS file, using the `gen_repl.py` script.
-Kenning requires the `.repl` file to be located in the `build directory`, so we will call `gen_repl.py` directly:
+In previous examples, `run_renode.py` script was used, which generated a Renode .repl file (file describing the simulated platform) in the `/tmp` directory, for the board based on Zephyr DTS file, using `gen_repl.py` script.
+Kenning requires the `.repl` file to be located in the `build directory`, so call `gen_repl.py` directly:
 
 ```bash
 python ./scripts/gen_repl.py --repl build/stm32f746g_disco.repl
@@ -204,8 +206,8 @@ python ./scripts/gen_repl.py --repl build/stm32f746g_disco.repl
 
 Please note that the filename must be the same as the name of the board being used.
 
-We will again use a Kenning scenario from one of the example workflows:
-
+A Kenning scenario will be used.
+It can be found in one of the example workflows:
 ```bash
 cd workflows/minispot
 kenning test report \
@@ -215,13 +217,13 @@ kenning test report \
   --measurements results.json
 ```
 
-In `report/report/report.html`, we can find an HTML version of the report that contains:
+In `report/report/report.html`, you can find an HTML version of the report that contains:
 
-- confusion matrix
-- inference quality metrics
-- detection rate (number of anomalies detected)
-- false alarm rate (number of false positives)
-- detection delay depending on detection threshold
+- confusion matrix,
+- inference quality metrics,
+- detection rate (number of anomalies detected),
+- false alarm rate (number of false positives),
+- detection delay depending on detection threshold.
 
 To run this evaluation on a different board, create an overlay file telling Kenning which UART port to use by adding the `kcomms` alias.
 An example can be found in `samples/anomaly/boards/stm32f746g_disco.overlay`.
@@ -231,7 +233,7 @@ In such case, please remember you need to modify the `gen_repl.py` script in ord
 
 ## Other workflows
 
-The example workflow we presented is automated using a Makefile at `workflows/minispot`.
+The example workflow presented is automated using a Makefile at `workflows/minispot`.
 To run it automatically, go to that folder and run `make eval` (this will train the model and generate a report).
 
 You can explore other example workflows in the `workflows` directory by running (and analyzing) the Makefiles.

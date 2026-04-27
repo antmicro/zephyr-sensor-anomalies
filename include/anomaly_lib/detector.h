@@ -19,6 +19,17 @@
  * No smoothing used for anomaly detection.
  */
 #define DETECTOR_SMOOTHING_NONE NULL
+
+/**
+ * Apply exponential moving average smoothing. Ensure
+ * to set the smoothing factor:
+ *
+ * ```c
+ * struct detector_classifier dc;
+ * detector_classifier_init(&dc, ...);
+ * dc.exp_moving_avg_opts.smoothing_factor = 0.3f;
+ * ```
+ */
 #define DETECTOR_SMOOTHING_EXP_SMOOTHING detector_smoothing_exp_smoothing
 
 enum detector_status
@@ -69,21 +80,30 @@ struct detector_classifier
 {
     /** Detector object for this specific classifier */
     struct detector *detector;
+    /** @private Provider reader object */
     struct provider_reader *pr;
+    /** @private started deinitialization process */
     atomic_t deinit_started;
+    /** @private internal work queue */
     struct k_work_q wq;
+    /** @private internal buffer for the provider */
     float buffer[128];
+    /** @private internal header buffer */
     struct provider_hdr_entry hdr[128];
 
+    /** Threshold for the anomaly detection */
     float threshold;
+    /** Expected processing time */
     int64_t process_ms;
 
+    /** @private thread data */
     struct k_thread thread_data;
+    /** @private thread ID */
     k_tid_t tid;
 
     /** Number of registered callbacks */
     size_t num_cbs;
-    /** Struct containing the registered callbacks */
+    /** @private Struct containing the registered callbacks */
     detector_cb_t cb_hdlrs[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS];
     void *cb_ctxs[CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS];
 
@@ -95,10 +115,9 @@ struct detector_classifier
         `smoothing_score` to some absurd number such as 0 or NaN. */
     bool smoothing_started;
 
-    /** Options for the smoothing average. Needs to be set after
-        calling `detector_classifier_init` */
     union
     {
+        /** Options when `DETECTOR_SMOOTHING_EXP_SMOOTHING` is used */
         struct detector_smoothing_opts_exp_mav exp_moving_avg_opts;
     };
 };
@@ -174,7 +193,7 @@ int32_t detector_classifier_deinit(struct detector_classifier *dc);
 /**
  * Register a callback that is run when an anomaly is detected.
  *
- * @param d      The detector object.
+ * @param dc     The detector object.
  * @param cb     Callback function
  * @param ctx    Opaque context passed to this specific callback.
  */
@@ -183,7 +202,7 @@ int32_t detector_classifier_register_cb(struct detector_classifier *dc, detector
 /**
  * Unregister all callbacks
  *
- * @param d      The detector object
+ * @param dc     The detector object
  */
 void detector_classifier_unregister_cb(struct detector_classifier *dc);
 

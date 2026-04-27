@@ -12,3 +12,8 @@ __pycache__/
 # editor-specific files
 .dir-locals.el
 .vscode
+
+# docs
+.python-version
+uv.lock
+docs/xml

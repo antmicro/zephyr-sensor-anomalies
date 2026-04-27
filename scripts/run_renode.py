@@ -11,13 +11,15 @@ import argparse
 import re
 import time
 import random
+from typing import List
 import serial
 from pyrenode3.wrappers import Emulation, Analyzer
 import csv
 from pathlib import Path
-from kenning.core.sensor import LIS2DS12Sensor
 import tempfile
-from gen_repl import prepare_repl
+from gen_repl import prepare_repl, SensorMapping, parse_sensor
+import kenning
+from kenning.core.sensor import Sensor
 
 
 class ZephyrBuildException(Exception):
@@ -28,11 +30,25 @@ class ZephyrBuildException(Exception):
     pass
 
 
-def get_sensors():
-    return [
-        LIS2DS12Sensor(platform.sysbus.i2c1.lis2ds12_1),
-        LIS2DS12Sensor(platform.sysbus.i2c1.lis2ds12_2),
-    ]
+def resolve_path(obj, path: str):
+    for part in path.split("."):
+        obj = getattr(obj, part)
+    return obj
+
+
+def to_kenning_sensor(sensor: SensorMapping) -> Sensor:
+    kenning_sensor = sensor.csharp_class.split(".")[-1]
+    kenning_sensor = f"{kenning_sensor}Sensor"
+    # Something like `LIS2DS12Sensor`
+    sensor_cls = getattr(kenning.core.sensor, kenning_sensor)
+    # Example: platform.sysbus.i2c1.0x3d
+    peripheral = resolve_path(platform, f"sysbus.{sensor.peripheral}.{sensor.name}")
+    # example: LIS2DS12Sensor(platform.sysbus.i2c1.lis2ds12_1)
+    return sensor_cls(peripheral)
+
+
+def get_sensors(sensorlist: List[SensorMapping]) -> List[Sensor]:
+    return list(map(to_kenning_sensor, sensorlist))
 
 
 def get_cmake_var(cmake_var: str) -> str:
@@ -82,7 +98,23 @@ if __name__ == "__main__":
         action="store_true",
         help="Show Renode Analyzer window with the Zephyr console uart output (aside from printing the output to console)",
     )
+
+    parser.add_argument(
+        "--sensor",
+        type=parse_sensor,
+        help="Add a new sensor of format 'sensor_name,csharp_class,peripheral,address'",
+        action="append",
+    )
     args = parser.parse_args()
+
+    # Default sensors
+    sensorlist = [
+        SensorMapping("lis2ds12_1", "Sensors.LIS2DS12", "i2c1", "0x3d"),
+        SensorMapping("lis2ds12_2", "Sensors.LIS2DS12", "i2c1", "0x2d"),
+    ]
+
+    if args.sensor is not None:
+        sensorlist = args.sensor
 
     board = get_cmake_var("BOARD:STRING").split("/")[0]
     build_path = get_cmake_var("APPLICATION_BINARY_DIR:PATH")
@@ -91,7 +123,7 @@ if __name__ == "__main__":
     emulation = Emulation()
 
     platform = emulation.add_mach(board)
-    platform.load_repl(prepare_repl(tempfile.mkstemp()[1]))
+    platform.load_repl(prepare_repl(tempfile.mkstemp()[1], sensorlist))
     platform.load_elf(f"{build_path}/zephyr/zephyr.elf")
 
     if args.debug:
@@ -118,7 +150,7 @@ if __name__ == "__main__":
 
     dataset_last_sample_time = None
 
-    sensors = get_sensors()
+    sensors = get_sensors(sensorlist)
 
     start_time = time.time()
 
