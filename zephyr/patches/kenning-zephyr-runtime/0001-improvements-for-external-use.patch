@@ -85,14 +85,14 @@ index c5c111d..daa34b3 100644
 --- a/demo_app/tvm.conf
 +++ b/demo_app/tvm.conf
 @@ -6,7 +6,7 @@ CONFIG_KENNING_ML_RUNTIME_TVM=y
- CONFIG_KENNING_TVM_HEAP_SIZE=66
-
+ CONFIG_KENNING_TVM_HEAP_SIZE=72
  CONFIG_KENNING_TVM_MODEL_MAGIC_WAND=y
 -CONFIG_KENNING_MODEL_PATH="./demo_app/model/tvm/magic_wand"
 +CONFIG_KENNING_MODEL_PATH="model/tvm/magic_wand"
 
  CONFIG_TIMING_FUNCTIONS=y
  CONFIG_TEST_RANDOM_GENERATOR=y
+ 
 diff --git a/demo_app/tvm_int8.conf b/demo_app/tvm_int8.conf
 index 2c67de7..27ac246 100644
 --- a/demo_app/tvm_int8.conf
