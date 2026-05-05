@@ -1,15 +1,15 @@
 # Zephyr Sensor Anomalies
 
-Copyright (c) 2025 [Antmicro](https://www.antmicro.com)
+Copyright (c) 2025-2026 [Antmicro](https://www.antmicro.com)
 
-Zephyr Sensor Anomalies is a [Zephyr RTOS](https://www.zephyrproject.org/) library that allows to track anomalies in provided set of sensors using Machine Learning models ran with [Kenning Zephyr Runtime](https://github.com/antmicro/kenning-zephyr-runtime) or [emlearn](https://github.com/emlearn/emlearn).
+Zephyr Sensor Anomalies is a [Zephyr RTOS](https://www.zephyrproject.org/) library that allows to track anomalies in a provided set of sensors using Machine Learning models ran with [Kenning Zephyr Runtime](https://github.com/antmicro/kenning-zephyr-runtime) or [emlearn](https://github.com/emlearn/emlearn).
 
 It provides tools for:
 
 * Reading data from sensors and using it to generate datasets
-* Setting up analysis of sensor readings using neural networks, kNN, decision trees, ...
+* Setting up analysis of sensor readings using neural networks, kNN, decision trees, etc.
 * Setting up callbacks on detected anomalies
-* Evaluating anomaly detection using [Kenning](https://kenning.ai) framework
+* Evaluating anomaly detection using the [Kenning](https://kenning.ai) framework
 
 ## Installing dependencies
 
@@ -22,7 +22,7 @@ apt install --no-install-recommends -y git cmake ninja-build gperf \
   xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1 libicu-dev xxd
 ```
 
-then, install `west` with `uv` (or `pip` if `uv` is not available):
+Install `west` with `uv` (or `pip` if `uv` is not available):
 
 ```bash
 uv venv --python=3.11
@@ -30,7 +30,7 @@ source .venv/bin/activate
 uv pip install west
 ```
 
-and initialize Zephyr:
+Initialize Zephyr:
 
 ```bash
 west init -l .
@@ -49,7 +49,7 @@ uv pip install 'kenning[torch,tflite,reports,uart,renode,tensorflow] @ git+https
 
 ## Example workflow
 
-As an example, let's go through the steps of training an anomaly detection model for a set of 2 [LIS2DS12 accelerometers](https://www.st.com/en/mems-and-sensors/lis2ds12.html).
+As an example, we will go through the steps of training an anomaly detection model for a set of two [LIS2DS12 accelerometers](https://www.st.com/en/mems-and-sensors/lis2ds12.html).
 
 #### Demo application for reading and printing sensor data
 
@@ -61,43 +61,44 @@ First, build the application:
 west build -p -b stm32f746g_disco samples/sensors
 ```
 
-Application could be ran on real hardware and collect actual sensor readings.
-However for the purposes of this demonstration let's will use `run_renode.py` script to launch a [Renode](https://renode.io) simulation and feed data from a CSV file to the simulated sensors.
+The application could be ran on real hardware and collect actual sensor readings.
+However, for the purposes of this demonstration, we will use the `run_renode.py` script to launch a [Renode](https://renode.io) simulation, and feed data from a CSV file to the simulated sensors.
 
-For that, let's download some sample data:
+For that, download sample data:
 
 ```bash
 curl https://dl.antmicro.com/kenning/datasets/anomaly_detection/minispot.csv -o data.csv
 ```
 
-For simulation purposes, download Renode and export some environmental variables pointing to its location:
+For this demonstration, we will require Renode to run the simulation.
+Download Renode and export environmental variables pointing to its location:
 
 ```bash
 ./scripts/prepare_renode.sh
 source ./scripts/activate_renode.sh
 ```
 
-Please note, that the second script must be used any time a new bash is used.
+Please note that the second script must be used any time you use a new bash.
 
-Finally, use the script to run a simulation:
+Then, use the script to run a simulation:
 
 ```bash
 python ./scripts/run_renode.py --timeout 5 --frequency 100 --data data.csv
 ```
 
-This will run the simulation for 5 seconds, feeding sensor data from `data.csv` file with the frequency of 100Hz.
-One line in the CSV represents 1 data sample (for all sensors).
+This will run the simulation for 5 seconds, feeding sensor data from the `data.csv` file with the frequency of 100Hz.
+One line in the CSV file represents one data sample (for all sensors).
 If no file is provided, random values will be used.
 
-With some modifications the script may also be used to test other applications, with different sensor arrays.
+With some modifications, the script may also be used to test other applications with different sensor arrays.
 To do that, modify functions `prepare_repl` in `gen_repl.py` and `get_sensors` in `run_renode.py`.
 
 #### Creating an anomaly detection model
 
-Let's train an example Kenning PyTorch model, defined in `workflows/minispot/model.py` - a simple binary classifier.
-A Kenning scenario (a YAML file with Kenning configuration), from one of the example `workflows` provided with this repository, can be used.
+We will train an example Kenning PyTorch model, defined in `workflows/minispot/model.py`, which will be a simple binary classifier.
+We can use a Kenning scenario (a YAML file with Kenning configuration) from one of the example `workflows` provided with this repository.
 
-Model will be trained with a labeled dataset, that Kenning will automatically download from `https://dl.antmicro.com/kenning/datasets/anomaly_detection/minispot.csv`.
+The model will be trained with a labeled dataset, which is automatically downloaded by Kenning from `https://dl.antmicro.com/kenning/datasets/anomaly_detection/minispot.csv`.
 
 ```bash
 cd workflows/minispot
@@ -110,14 +111,15 @@ After training the model, compile it for efficient execution using `TFLite Micro
 kenning optimize --cfg scenario.yml
 ```
 
-This will generate 2 files: `fp32.1.tflite` and `fp32.1.tflite.json`, both will be saved in `build`.
+This will generate two files: `fp32.1.tflite` and `fp32.1.tflite.json`.
+Both files will be saved in `build`.
 
-To run this model, another example application may be used - `samples/anomaly`.
-While `samples/sensors` simply prints the sensor outputs to UART, this one will run them through the given model.
+To run this model, we can use another example application - `samples/anomaly`.
+The previously used `samples/sensors` prints the sensor outputs to UART; `samples/anomaly` will run these outputs through the given model.
 
-The Zephyr Sensor Anomalies library will take care of pre-processing (creating a sliding window) and post-processing ("smoothing" the output by removing outliers and using output from the binary classifier to compute an "anomaly metric") of data.
+The Zephyr Sensor Anomalies library will take care of data pre-processing (creating a sliding window) and post-processing ("smoothing" the output by removing outliers and using output from the binary classifier to compute an "anomaly metric").
 
-Let's go back to the main project folder:
+Go back to the main project folder:
 
 ```bash
 cd ../../
@@ -134,7 +136,7 @@ west build -p -b stm32f746g_disco samples/anomaly -- \
     -DCONFIG_KENNING_MODEL_PATH=\"$(realpath ./workflows/minispot/build/fp32.1.tflite)\"
 ```
 
-Then, use the aforementioned script run it on random data:
+Then, either use the previously mentioned script to run it on random data:
 
 ```bash
 python ./scripts/run_renode.py --timeout 5 --frequency 20
@@ -146,7 +148,7 @@ Or run the app on the dataset downloaded earlier:
 python ./scripts/run_renode.py --timeout 5 --frequency 20 --data data.csv
 ```
 
-Output should look something like this:
+The output should look something like this:
 
 ```bash skip
 0.775274,0.105284,0.373280,0.637687,0.612562,0.991824,0.999648
@@ -169,20 +171,20 @@ Output should look something like this:
 0.747757,0.449850,0.369691,0.202193,0.867398,0.851844,0.991345
 ```
 
-First 6 columns are sensor values, while the rightmost column is the model's prediction (0 - anomaly, 1 - no anomaly).
+The first 6 columns are sensor values; the rightmost column shows the model's prediction (0 - anomaly, 1 - no anomaly).
 
-The application will also emit a warning, if your model is too slow, based on the expected inference time provided (in `ms`) with `CONFIG_PROCESSING_DELAY` Kconfig option (default value is 50).
+The application will emit a warning if your model is too slow; the basis for this is the expected inference time provided by the `CONFIG_PROCESSING_DELAY` Kconfig option (the default value is 50 ms).
 
-The `sample/anomaly` application can easily be used on a different model and sensor array.
-To do that, there is no need to change the code of the application itself (since it automatically detects available sensors) - just make sure the sensor you're using is described in `lib/provider_lib/sensor_map.yaml`.
-All you need to do is change structure of the model in the `model.py` file.
+The `sample/anomaly` application can easily be used on a different model or sensor array.
+If you wish to do that, the code of the application does not need to be modified in any way (since it automatically detects available sensors); however, be sure the sensor you are using is described in `lib/provider_lib/sensor_map.yaml`.
+All you need to do is change the structure of the model in the `model.py` file.
 
 #### Evaluating the model in Kenning
 
-Aside from training and optimization, `samples/anomaly` app may be used together with Kenning, to evaluate accuracy of the model and generate a report.
-That is because the application supports Kenning Protocol.
+The `samples/anomaly` application supports Kenning Protocol. Because of that, it can be used for not only training and optimization, but also for evaluating the accuracy of the model and generating a report with Kenning.
 
-For that, first build the application with Kenning Protocol integration enabled (notice how `-DCONFIG_KENNING_PROTOCOL_INTEGRATION=y` is set this time):
+For that, first build the application with Kenning Protocol integration enabled.
+To achieve that, the value of `DCONFIG_KENNING_PROTOCOL_INTEGRATION` is changed:
 
 ```bash
 west build -p -b stm32f746g_disco samples/anomaly -- \
@@ -193,16 +195,16 @@ west build -p -b stm32f746g_disco samples/anomaly -- \
     -DCONFIG_KENNING_MODEL_PATH=\"$(realpath ./workflows/minispot/build/fp32.1.tflite)\"
 ```
 
-In previous examples, `run_renode.py` script was used, which generated a Renode .repl file (file describing the simulated platform) in the `/tmp` directory, for the board based on Zephyr DTS file, using `gen_repl.py` script.
-Kenning needs the `.repl` file to be located in the `build directory`, so let's call `gen_repl.py` directly:
+In previous examples, we used the `run_renode.py` script, which generated a Renode `.repl` file (describing the simulated platform) in the `/tmp` directory, for the board based on the Zephyr DTS file, using the `gen_repl.py` script.
+Kenning requires the `.repl` file to be located in the `build directory`, so we will call `gen_repl.py` directly:
 
 ```bash
 python ./scripts/gen_repl.py --repl build/stm32f746g_disco.repl
 ```
 
-Please note, that the filename must be the same as name of the board being used.
+Please note that the filename must be the same as the name of the board being used.
 
-Let's use once again a Kenning scenario from one of example workflows:
+We will again use a Kenning scenario from one of the example workflows:
 
 ```bash
 cd workflows/minispot
@@ -213,21 +215,23 @@ kenning test report \
   --measurements results.json
 ```
 
-At `report/report/report.html` an HTML version of the report can be found, containing:
+In `report/report/report.html`, we can find an HTML version of the report that contains:
 
 - confusion matrix
 - inference quality metrics
-- detection rate (how many anomalies were detected) and false alarm rate (how many of anomalies detected were not, in fact, anomalies) depending on detection threshold
+- detection rate (number of anomalies detected)
+- false alarm rate (number of false positives)
 - detection delay depending on detection threshold
 
-In order to run this evaluation on a different board, create an overlay file, telling Kenning which UART port to use, by adding `kcomms` alias.
-Example at `samples/anomaly/boards/stm32f746g_disco.overlay`.
-In this file also define any additional sensors, that are not by default part of the board - in such a case please remember to also modify `gen_repl.py` script to add these sensors to the `.repl` and update sensor info in `scenario.yml`.
+To run this evaluation on a different board, create an overlay file telling Kenning which UART port to use by adding the `kcomms` alias.
+An example can be found in `samples/anomaly/boards/stm32f746g_disco.overlay`.
+You should use this file to define any additional sensors that are not part of the board by default.
+In such case, please remember you need to modify the `gen_repl.py` script in order to add these sensors to the `.repl`, and update the sensor information in `scenario.yml`.
 
 
 ## Other workflows
 
-The example workflow presented above (creating and testing a simple binary classifier) is automated using a Makefile at `workflows/minispot`.
-To run it automatically go to that folder and run `make eval` (this will train the model and generate a report).
+The example workflow we presented is automated using a Makefile at `workflows/minispot`.
+To run it automatically, go to that folder and run `make eval` (this will train the model and generate a report).
 
-Feel free to explore other example workflows in the `workflows` directory, by running (and analyzing) the Makefiles.
+You can explore other example workflows in the `workflows` directory by running (and analyzing) the Makefiles.
