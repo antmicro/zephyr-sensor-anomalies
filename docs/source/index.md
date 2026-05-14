@@ -8,4 +8,5 @@ getting-started
 reading-sensor-data
 real-time-detection
 api-docs
+sample-kenning-evaluation-report
 ```

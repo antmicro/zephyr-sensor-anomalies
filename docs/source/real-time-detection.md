@@ -440,4 +440,6 @@ kenning test report \
 ```
 
 Opening the report at `reports/anomaly/report.html` should show a complete report of the model performance.
-For more information on generating reports with Kenning, see the [Kenning documentation](https://antmicro.github.io/kenning/cmd-usage.html#generating-performance-reports).
+You can also see an example real-time anomaly detection evaluation report [here](sample-kenning-evaluation-report).
+
+Check out the [kenning docs](https://antmicro.github.io/kenning/cmd-usage.html#generating-performance-reports) for more information on generating reports with kenning.
