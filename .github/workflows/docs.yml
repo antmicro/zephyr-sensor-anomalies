@@ -1,0 +1,91 @@
+name: Zephyr Sensor Anomalies docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  docs-generation:
+    runs-on: ubuntu-latest
+    env:
+      KENNING_BRANCH: main
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+              texlive-full pandoc doxygen \
+              git cmake ninja-build gperf mono-complete \
+              build-essential ccache dfu-util \
+              device-tree-compiler wget xz-utils file \
+              libsdl2-dev libmagic1 xxd curl
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Setup Zephyr
+        run: |
+          uv venv -p 3.11
+          source .venv/bin/activate
+
+          uv pip install west uv
+          west init -l .
+          west update
+          west patch apply
+          west zephyr-export
+
+          uv pip install -r ../zephyr/scripts/requirements.txt
+          west sdk install -t arm-zephyr-eabi
+          uv pip install -r docs/requirements.txt
+
+          uv pip install 'kenning[torch,tflite,reports,uart,renode,tensorflow] @ git+https://github.com/antmicro/kenning'
+
+          ./scripts/prepare_renode.sh
+
+      - name: Generate reports
+        run: |
+          source .venv/bin/activate
+          source ./scripts/activate_renode.sh
+
+          cd docs
+          make report
+
+      - name: Generate documentation
+        run: |
+          source .venv/bin/activate
+          cd docs
+          uv pip install -r requirements.txt
+          make html latexpdf
+          cp build/latex/*.pdf build/html/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gh-page
+          path: docs/build/html
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cd docs/build/html
+          touch .nojekyll
+          git init
+          cp ../../../.git/config ./.git/config
+          git add .
+          git config --local user.email "push@gha"
+          git config --local user.name "GHA"
+          git commit -m "update ${{ github.sha }}"
+          git push -u origin +HEAD:gh-pages
