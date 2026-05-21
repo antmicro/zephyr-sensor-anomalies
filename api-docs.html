@@ -1,0 +1,1813 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>API Documentation - Zephyr Sensor Anomalies</title>
+      
+    
+    
+      
+        
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+        <link rel="stylesheet" type="text/css" href="_static/sphinx_immaterial_theme.c5589c0bd87d933a4.min.css?v=eeeb54bc" />
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Zephyr Sensor Anomalies" class="md-header__button md-logo" aria-label="Zephyr Sensor Anomalies" data-md-component="logo">
+      <img src="_static/white.svg" alt="logo">
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Zephyr Sensor Anomalies
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Documentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <div class="md-header__button">
+        <a href="zephyr-sensor-anomalies.pdf" title="PDF - zephyr-sensor-anomalies.pdf">
+          <div class="md-icon">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M64 0C28.7 0 0 28.7 0 64v384c0 35.3 28.7 64 64 64h256c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zm192 0v128h128L256 0zM64 224h24c30.9 0 56 25.1 56 56s-25.1 56-56 56h-8v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V240c0-8.8 7.2-16 16-16zm24 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-8v48h8zm72-64c0-8.8 7.2-16 16-16h24c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-24c-8.8 0-16-7.2-16-16V240zm32 112h8c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-8v96zm96-128h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V240c0-8.8 7.2-16 16-16z"/></svg>
+          </div>
+        </a>
+      </div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Zephyr Sensor Anomalies" class="md-nav__button md-logo" aria-label="Zephyr Sensor Anomalies" data-md-component="logo">
+      <img src="_static/white.svg" alt="logo">
+    </a>
+    Zephyr Sensor Anomalies
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="introduction.html" class="md-nav__link">
+        <span class="md-ellipsis">Introduction</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="getting-started.html" class="md-nav__link">
+        <span class="md-ellipsis">Getting Started</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reading-sensor-data.html" class="md-nav__link">
+        <span class="md-ellipsis">Reading Sensor Data</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="real-time-detection.html" class="md-nav__link">
+        <span class="md-ellipsis">Real-<wbr>time Anomaly Detection</span>
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          <span class="md-ellipsis">API Documentation</span>
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        <span class="md-ellipsis">API Documentation</span>
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#provider-lib" class="md-nav__link">
+    <span class="md-ellipsis">Provider lib</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Provider lib">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-enums" class="md-nav__link">
+    <span class="md-ellipsis">Enums</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv415provider_status" class="md-nav__link">
+    <span class="md-ellipsis">provider_<wbr>status</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="provider_status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15provider_status18PROVIDER_STATUS_OKE" class="md-nav__link">
+    <span class="md-ellipsis">PROVIDER_<wbr>STATUS_<wbr>OK</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15provider_status21PROVIDER_STATUS_ERRORE" class="md-nav__link">
+    <span class="md-ellipsis">PROVIDER_<wbr>STATUS_<wbr>ERROR</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15provider_status32PROVIDER_STATUS_SAMPLE_FETCH_ERRE" class="md-nav__link">
+    <span class="md-ellipsis">PROVIDER_<wbr>STATUS_<wbr>SAMPLE_<wbr>FETCH_<wbr>ERR</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15provider_status28PROVIDER_STATUS_CHAN_GET_ERRE" class="md-nav__link">
+    <span class="md-ellipsis">PROVIDER_<wbr>STATUS_<wbr>CHAN_<wbr>GET_<wbr>ERR</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15provider_status23PROVIDER_STATUS_OOB_ERRE" class="md-nav__link">
+    <span class="md-ellipsis">PROVIDER_<wbr>STATUS_<wbr>OOB_<wbr>ERR</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-functions" class="md-nav__link">
+    <span class="md-ellipsis">Functions</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424provider_reader_registerP15provider_readerP8provider" class="md-nav__link">
+    <span class="md-ellipsis">provider_<wbr>reader_<wbr>register</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424provider_reader_read_allP15provider_readerPf" class="md-nav__link">
+    <span class="md-ellipsis">provider_<wbr>reader_<wbr>read_<wbr>all</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv419provider_reader_hdrP15provider_readerP18provider_hdr_entry" class="md-nav__link">
+    <span class="md-ellipsis">provider_<wbr>reader_<wbr>hdr</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv48provider" class="md-nav__link">
+    <span class="md-ellipsis">provider</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="provider">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-members" class="md-nav__link">
+    <span class="md-ellipsis">Public Members</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N8provider8channelsE" class="md-nav__link">
+    <span class="md-ellipsis">channels</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N8provider10channels_NE" class="md-nav__link">
+    <span class="md-ellipsis">channels_<wbr>N</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N8provider7read_fnE" class="md-nav__link">
+    <span class="md-ellipsis">read_<wbr>fn</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N8provider4infoE" class="md-nav__link">
+    <span class="md-ellipsis">info</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv415provider_reader" class="md-nav__link">
+    <span class="md-ellipsis">provider_<wbr>reader</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="provider_reader">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-members" class="md-nav__link">
+    <span class="md-ellipsis">Public Members</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15provider_reader2psE" class="md-nav__link">
+    <span class="md-ellipsis">ps</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15provider_reader4ps_NE" class="md-nav__link">
+    <span class="md-ellipsis">ps_<wbr>N</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15provider_reader5dst_NE" class="md-nav__link">
+    <span class="md-ellipsis">dst_<wbr>N</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv418provider_hdr_entry" class="md-nav__link">
+    <span class="md-ellipsis">provider_<wbr>hdr_<wbr>entry</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="provider_hdr_entry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-members" class="md-nav__link">
+    <span class="md-ellipsis">Public Members</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N18provider_hdr_entry11provider_idE" class="md-nav__link">
+    <span class="md-ellipsis">provider_<wbr>id</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N18provider_hdr_entry4chanE" class="md-nav__link">
+    <span class="md-ellipsis">chan</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anomaly-lib" class="md-nav__link">
+    <span class="md-ellipsis">Anomaly lib</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Anomaly lib">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-defines" class="md-nav__link">
+    <span class="md-ellipsis">Defines</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.DETECTOR_SMOOTHING_NONE" class="md-nav__link">
+    <span class="md-ellipsis">DETECTOR_<wbr>SMOOTHING_<wbr>NONE</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.DETECTOR_SMOOTHING_EXP_SMOOTHING" class="md-nav__link">
+    <span class="md-ellipsis">DETECTOR_<wbr>SMOOTHING_<wbr>EXP_<wbr>SMOOTHING</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c.DETECTOR_DEFAULT_OPTS" class="md-nav__link">
+    <span class="md-ellipsis">DETECTOR_<wbr>DEFAULT_<wbr>OPTS</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-typedefs" class="md-nav__link">
+    <span class="md-ellipsis">Typedefs</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv413detector_cb_t" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>cb_<wbr>t</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_cb_t">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv413detector_cb_t-param-ctx" class="md-nav__link">
+    <span class="md-ellipsis">Param ctx</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv413detector_cb_t-param-score" class="md-nav__link">
+    <span class="md-ellipsis">Param score</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv423detector_smoothing_cb_t" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>smoothing_<wbr>cb_<wbr>t</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-enums" class="md-nav__link">
+    <span class="md-ellipsis">Enums</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv415detector_status" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>status</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15detector_status18DETECTOR_STATUS_OKE" class="md-nav__link">
+    <span class="md-ellipsis">DETECTOR_<wbr>STATUS_<wbr>OK</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15detector_status21DETECTOR_STATUS_ERRORE" class="md-nav__link">
+    <span class="md-ellipsis">DETECTOR_<wbr>STATUS_<wbr>ERROR</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15detector_status24DETECTOR_STATUS_SIZE_ERRE" class="md-nav__link">
+    <span class="md-ellipsis">DETECTOR_<wbr>STATUS_<wbr>SIZE_<wbr>ERR</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15detector_status22DETECTOR_STATUS_EINVALE" class="md-nav__link">
+    <span class="md-ellipsis">DETECTOR_<wbr>STATUS_<wbr>EINVAL</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N15detector_status22DETECTOR_STATUS_ERANGEE" class="md-nav__link">
+    <span class="md-ellipsis">DETECTOR_<wbr>STATUS_<wbr>ERANGE</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-functions" class="md-nav__link">
+    <span class="md-ellipsis">Functions</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv432detector_smoothing_exp_smoothingP19detector_classifierfPv" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>smoothing_<wbr>exp_<wbr>smoothing</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv415detector_detectPKfPf" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>detect</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv413detector_initv" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>init</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv417detector_get_infoPv" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>get_<wbr>info</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>classifier_<wbr>init</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_classifier_init">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-parameters" class="md-nav__link">
+    <span class="md-ellipsis">Parameters</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-d" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_init::d (C++ function parameter) — Initialized detector" class="md-ellipsis">d</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-dc" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_init::dc (C++ function parameter) — Uninitialized detector classifier" class="md-ellipsis">dc</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-pr" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_init::pr (C++ function parameter) — Pointer to the initialized provider_reader object" class="md-ellipsis">pr</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-smoothing" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_init::smoothing (C++ function parameter) — DETECTOR_SMOOTHING_NONE - no smoothing." class="md-ellipsis">smoothing</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-processing_delay" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_init::processing_delay (C++ function parameter) — Cadence for obtaining new values from the detector." class="md-ellipsis">processing_<wbr>delay</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-threshold" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_init::threshold (C++ function parameter) — Probability threshold in (0, 1) to determine whether a score is anomaly or not." class="md-ellipsis">threshold</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv425detector_classifier_startP19detector_classifierii" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>classifier_<wbr>start</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_classifier_start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv425detector_classifier_startP19detector_classifierii-parameters" class="md-nav__link">
+    <span class="md-ellipsis">Parameters</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv425detector_classifier_startP19detector_classifierii-p-dc" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_start::dc (C++ function parameter) — Initialized classifier object" class="md-ellipsis">dc</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv425detector_classifier_startP19detector_classifierii-p-priority" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_start::priority (C++ function parameter) — Priority given to thread." class="md-ellipsis">priority</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv425detector_classifier_startP19detector_classifierii-p-thread_opts" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_start::thread_opts (C++ function parameter) — Pass DETECTOR_DEFAULT_OPTS for the default settings." class="md-ellipsis">thread_<wbr>opts</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv426detector_classifier_deinitP19detector_classifier" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>classifier_<wbr>deinit</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_classifier_deinit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv426detector_classifier_deinitP19detector_classifier-parameters" class="md-nav__link">
+    <span class="md-ellipsis">Parameters</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv426detector_classifier_deinitP19detector_classifier-p-dc" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_deinit::dc (C++ function parameter) — classifier object" class="md-ellipsis">dc</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>classifier_<wbr>register_<wbr>cb</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_classifier_register_cb">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-parameters" class="md-nav__link">
+    <span class="md-ellipsis">Parameters</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-dc" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_register_cb::dc (C++ function parameter) — The detector object." class="md-ellipsis">dc</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-cb" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_register_cb::cb (C++ function parameter) — Callback function" class="md-ellipsis">cb</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-ctx" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_register_cb::ctx (C++ function parameter) — Opaque context passed to this specific callback." class="md-ellipsis">ctx</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv433detector_classifier_unregister_cbP19detector_classifier" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>classifier_<wbr>unregister_<wbr>cb</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_classifier_unregister_cb">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv433detector_classifier_unregister_cbP19detector_classifier-parameters" class="md-nav__link">
+    <span class="md-ellipsis">Parameters</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv433detector_classifier_unregister_cbP19detector_classifier-p-dc" class="md-nav__link">
+    <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span><span title="detector_classifier_unregister_cb::dc (C++ function parameter) — The detector object" class="md-ellipsis">dc</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-variables" class="md-nav__link">
+    <span class="md-ellipsis">Variables</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv410g_detector" class="md-nav__link">
+    <span class="md-ellipsis">g_<wbr>detector</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv48detector" class="md-nav__link">
+    <span class="md-ellipsis">detector</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-members" class="md-nav__link">
+    <span class="md-ellipsis">Public Members</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N8detector6detectE" class="md-nav__link">
+    <span class="md-ellipsis">detect</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N8detector4initE" class="md-nav__link">
+    <span class="md-ellipsis">init</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N8detector8get_infoE" class="md-nav__link">
+    <span class="md-ellipsis">get_<wbr>info</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv431detector_smoothing_opts_exp_mav" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>smoothing_<wbr>opts_<wbr>exp_<wbr>mav</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_smoothing_opts_exp_mav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-members" class="md-nav__link">
+    <span class="md-ellipsis">Public Members</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N31detector_smoothing_opts_exp_mav16smoothing_factorE" class="md-nav__link">
+    <span class="md-ellipsis">smoothing_<wbr>factor</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv419detector_classifier" class="md-nav__link">
+    <span class="md-ellipsis">detector_<wbr>classifier</span>
+  </a>
+  
+    <nav class="md-nav" aria-label="detector_classifier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-members" class="md-nav__link">
+    <span class="md-ellipsis">Public Members</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier8detectorE" class="md-nav__link">
+    <span class="md-ellipsis">detector</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier9thresholdE" class="md-nav__link">
+    <span class="md-ellipsis">threshold</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier10process_msE" class="md-nav__link">
+    <span class="md-ellipsis">process_<wbr>ms</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier7num_cbsE" class="md-nav__link">
+    <span class="md-ellipsis">num_<wbr>cbs</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier7cb_ctxsE" class="md-nav__link">
+    <span class="md-ellipsis">cb_<wbr>ctxs</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier9smoothingE" class="md-nav__link">
+    <span class="md-ellipsis">smoothing</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier23smoothed_moving_averageE" class="md-nav__link">
+    <span class="md-ellipsis">smoothed_<wbr>moving_<wbr>average</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier17smoothing_startedE" class="md-nav__link">
+    <span class="md-ellipsis">smoothing_<wbr>started</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier19exp_moving_avg_optsE" class="md-nav__link">
+    <span class="md-ellipsis">exp_<wbr>moving_<wbr>avg_<wbr>opts</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-private-members" class="md-nav__link">
+    <span class="md-ellipsis">Private Members</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier2prE" class="md-nav__link">
+    <span class="md-ellipsis">pr</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier14deinit_startedE" class="md-nav__link">
+    <span class="md-ellipsis">deinit_<wbr>started</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier2wqE" class="md-nav__link">
+    <span class="md-ellipsis">wq</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier6bufferE" class="md-nav__link">
+    <span class="md-ellipsis">buffer</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier3hdrE" class="md-nav__link">
+    <span class="md-ellipsis">hdr</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier11thread_dataE" class="md-nav__link">
+    <span class="md-ellipsis">thread_<wbr>data</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier3tidE" class="md-nav__link">
+    <span class="md-ellipsis">tid</span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N19detector_classifier8cb_hdlrsE" class="md-nav__link">
+    <span class="md-ellipsis">cb_<wbr>hdlrs</span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sample-kenning-evaluation-report.html" class="md-nav__link">
+        <span class="md-ellipsis">Sample real-<wbr>time anomaly detection evaluation report</span>
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                  
+
+
+<h1 id="api-documentation">API Documentation<a class="headerlink" href="#api-documentation" title="Link to this heading">¶</a></h1>
+<h2 id="provider-lib">Provider lib<a class="headerlink" href="#provider-lib" title="Link to this heading">¶</a></h2>
+<p>Public API for the provider library.
+Details on how to use this can be found <a class="reference internal" href="reading-sensor-data.html"><span class="doc std std-doc">here</span></a>.</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-enums">Enums<a class="headerlink" href="#breathe-section-title-enums" title="Permalink to this headline">¶</a></p>
+<dl class="cpp enum objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv415provider_status">
+<span id="_CPPv315provider_status"></span><span id="_CPPv215provider_status"></span><span class="target" id="provider_8h_1a9b31cb11d1f3e1ce2964cc6c4925817c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">provider_status</span></span></span><a class="headerlink" href="#_CPPv415provider_status" title="Link to this definition">¶</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15provider_status18PROVIDER_STATUS_OKE">
+<span id="_CPPv3N15provider_status18PROVIDER_STATUS_OKE"></span><span id="_CPPv2N15provider_status18PROVIDER_STATUS_OKE"></span><span class="target" id="provider_8h_1a9b31cb11d1f3e1ce2964cc6c4925817ca6e603c37514a43119e1dcf47a84171b2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PROVIDER_STATUS_OK</span></span></span><a class="headerlink" href="#_CPPv4N15provider_status18PROVIDER_STATUS_OKE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15provider_status21PROVIDER_STATUS_ERRORE">
+<span id="_CPPv3N15provider_status21PROVIDER_STATUS_ERRORE"></span><span id="_CPPv2N15provider_status21PROVIDER_STATUS_ERRORE"></span><span class="target" id="provider_8h_1a9b31cb11d1f3e1ce2964cc6c4925817ca1cc67a5789422690c2cb23f63a2a1311"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PROVIDER_STATUS_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N15provider_status21PROVIDER_STATUS_ERRORE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15provider_status32PROVIDER_STATUS_SAMPLE_FETCH_ERRE">
+<span id="_CPPv3N15provider_status32PROVIDER_STATUS_SAMPLE_FETCH_ERRE"></span><span id="_CPPv2N15provider_status32PROVIDER_STATUS_SAMPLE_FETCH_ERRE"></span><span class="target" id="provider_8h_1a9b31cb11d1f3e1ce2964cc6c4925817ca98c7a8449ead73ef6a9fb17c15a7cec0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PROVIDER_STATUS_SAMPLE_FETCH_ERR</span></span></span><a class="headerlink" href="#_CPPv4N15provider_status32PROVIDER_STATUS_SAMPLE_FETCH_ERRE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15provider_status28PROVIDER_STATUS_CHAN_GET_ERRE">
+<span id="_CPPv3N15provider_status28PROVIDER_STATUS_CHAN_GET_ERRE"></span><span id="_CPPv2N15provider_status28PROVIDER_STATUS_CHAN_GET_ERRE"></span><span class="target" id="provider_8h_1a9b31cb11d1f3e1ce2964cc6c4925817ca564f97d360c55e998260afd1225e0583"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PROVIDER_STATUS_CHAN_GET_ERR</span></span></span><a class="headerlink" href="#_CPPv4N15provider_status28PROVIDER_STATUS_CHAN_GET_ERRE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15provider_status23PROVIDER_STATUS_OOB_ERRE">
+<span id="_CPPv3N15provider_status23PROVIDER_STATUS_OOB_ERRE"></span><span id="_CPPv2N15provider_status23PROVIDER_STATUS_OOB_ERRE"></span><span class="target" id="provider_8h_1a9b31cb11d1f3e1ce2964cc6c4925817ca938963000c7c590c3af9e63a719967cf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PROVIDER_STATUS_OOB_ERR</span></span></span><a class="headerlink" href="#_CPPv4N15provider_status23PROVIDER_STATUS_OOB_ERRE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions<a class="headerlink" href="#breathe-section-title-functions" title="Permalink to this headline">¶</a></p>
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv424provider_reader_registerP15provider_readerP8provider">
+<span id="_CPPv324provider_reader_registerP15provider_readerP8provider"></span><span id="_CPPv224provider_reader_registerP15provider_readerP8provider"></span><span id="provider_reader_register__provider_readerP.providerP"></span><span class="target" id="provider_8h_1a2d2cef06fa97b45b3d02ee0da47b20ea"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">provider_reader_register</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv415provider_reader" title="provider_reader (C++ class) — #include &lt;provider.h&gt;  Public Members    struct provider *ps[CONFIG_MAX_PROVIDER_COUNT]      uint32_t ps_N      uint32_t dst_N"><span class="n"><span class="pre">provider_reader</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv424provider_reader_registerP15provider_readerP8provider" title="provider_reader_register::pr (C++ function parameter)"><span class="n sig-param"><span class="pre">pr</span></span></a>, </span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48provider" title="provider (C++ class) — #include &lt;provider.h&gt;  Public Members    enum sensor_channel *channels      uint32_t channels_N      int (*read_fn)(struct provider*, float*)      void *info"><span class="n"><span class="pre">provider</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv424provider_reader_registerP15provider_readerP8provider" title="provider_reader_register::p (C++ function parameter)"><span class="n sig-param"><span class="pre">p</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424provider_reader_registerP15provider_readerP8provider" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Registers a single provider in the provider reader and increments <code class="docutils literal notranslate"><span class="pre">dst_N</span></code>.</p>
+<p>Usually called from helpers like <code class="docutils literal notranslate"><span class="pre">provider_reader_register_all_sensor</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv424provider_reader_read_allP15provider_readerPf">
+<span id="_CPPv324provider_reader_read_allP15provider_readerPf"></span><span id="_CPPv224provider_reader_read_allP15provider_readerPf"></span><span id="provider_reader_read_all__provider_readerP.floatP"></span><span class="target" id="provider_8h_1ab1ba12da6db33cc5aa3af8c1f652e8b1"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">provider_reader_read_all</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv415provider_reader" title="provider_reader (C++ class) — #include &lt;provider.h&gt;  Public Members    struct provider *ps[CONFIG_MAX_PROVIDER_COUNT]      uint32_t ps_N      uint32_t dst_N"><span class="n"><span class="pre">provider_reader</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv424provider_reader_read_allP15provider_readerPf" title="provider_reader_read_all::pr (C++ function parameter)"><span class="n sig-param"><span class="pre">pr</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv424provider_reader_read_allP15provider_readerPf" title="provider_reader_read_all::dst (C++ function parameter)"><span class="n sig-param"><span class="pre">dst</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424provider_reader_read_allP15provider_readerPf" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Reads from all providers in the provider reader using <code class="docutils literal notranslate"><span class="pre">read_fn</span></code> and collates results into a float buffer.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dst</span></code> size must be greater or equal than <code class="docutils literal notranslate"><span class="pre">dst_N</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv419provider_reader_hdrP15provider_readerP18provider_hdr_entry">
+<span id="_CPPv319provider_reader_hdrP15provider_readerP18provider_hdr_entry"></span><span id="_CPPv219provider_reader_hdrP15provider_readerP18provider_hdr_entry"></span><span id="provider_reader_hdr__provider_readerP.provider_hdr_entryP"></span><span class="target" id="provider_8h_1a66c2f129eae65f15e36198db1d628384"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">provider_reader_hdr</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv415provider_reader" title="provider_reader (C++ class) — #include &lt;provider.h&gt;  Public Members    struct provider *ps[CONFIG_MAX_PROVIDER_COUNT]      uint32_t ps_N      uint32_t dst_N"><span class="n"><span class="pre">provider_reader</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv419provider_reader_hdrP15provider_readerP18provider_hdr_entry" title="provider_reader_hdr::pr (C++ function parameter)"><span class="n sig-param"><span class="pre">pr</span></span></a>, </span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv418provider_hdr_entry" title="provider_hdr_entry (C++ class) — #include &lt;provider.h&gt;  Public Members    uint32_t provider_id      enum sensor_channel chan"><span class="n"><span class="pre">provider_hdr_entry</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv419provider_reader_hdrP15provider_readerP18provider_hdr_entry" title="provider_reader_hdr::hdr (C++ function parameter)"><span class="n sig-param"><span class="pre">hdr</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419provider_reader_hdrP15provider_readerP18provider_hdr_entry" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Generates a header containing information on provider id and channel of every element in the float buffer returned by <code class="docutils literal notranslate"><span class="pre">provider_reader_read_all</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">hdr</span></code> size must be greater or equal than <code class="docutils literal notranslate"><span class="pre">dst_N</span></code>. Header doesn’t change between reads and should be generated only after provider registration. </p>
+</dd></dl>
+
+</div>
+<dl class="cpp struct objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv48provider">
+<span id="_CPPv38provider"></span><span id="_CPPv28provider"></span><span id="provider"></span><span class="target" id="structprovider"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">provider</span></span></span><a class="headerlink" href="#_CPPv48provider" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;provider.h&gt;</em></div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members<a class="headerlink" href="#breathe-section-title-public-members" title="Permalink to this headline">¶</a></p>
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N8provider8channelsE">
+<span id="_CPPv3N8provider8channelsE"></span><span id="_CPPv2N8provider8channelsE"></span><span id="provider::channels__sensor_channelP"></span><span class="target" id="structprovider_1a53729ba125d33a410451303cbd652800"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="n"><span class="pre">sensor_channel</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">channels</span></span></span><a class="headerlink" href="#_CPPv4N8provider8channelsE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N8provider10channels_NE">
+<span id="_CPPv3N8provider10channels_NE"></span><span id="_CPPv2N8provider10channels_NE"></span><span id="provider::channels_N__uint32_t"></span><span class="target" id="structprovider_1aa2c459288431b6c123b210e37cc72500"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">channels_N</span></span></span><a class="headerlink" href="#_CPPv4N8provider10channels_NE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N8provider7read_fnE">
+<span id="_CPPv3N8provider7read_fnE"></span><span id="_CPPv2N8provider7read_fnE"></span><span class="target" id="structprovider_1acb28ad230e07c259af0923604cfc9b0a"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">read_fn</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48provider" title="provider (C++ class) — #include &lt;provider.h&gt;  Public Members    enum sensor_channel *channels      uint32_t channels_N      int (*read_fn)(struct provider*, float*)      void *info"><span class="n"><span class="pre">provider</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv4N8provider7read_fnE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N8provider4infoE">
+<span id="_CPPv3N8provider4infoE"></span><span id="_CPPv2N8provider4infoE"></span><span id="provider::info__voidP"></span><span class="target" id="structprovider_1a9c5a05887b56f610a54e020688df00d0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">info</span></span></span><a class="headerlink" href="#_CPPv4N8provider4infoE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv415provider_reader">
+<span id="_CPPv315provider_reader"></span><span id="_CPPv215provider_reader"></span><span id="provider_reader"></span><span class="target" id="structprovider__reader"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">provider_reader</span></span></span><a class="headerlink" href="#_CPPv415provider_reader" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;provider.h&gt;</em></div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members<a class="headerlink" href="#breathe-section-title-public-members" title="Permalink to this headline">¶</a></p>
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15provider_reader2psE">
+<span id="_CPPv3N15provider_reader2psE"></span><span id="_CPPv2N15provider_reader2psE"></span><span id="provider_reader::ps__providerPA"></span><span class="target" id="structprovider__reader_1aa09fbeb22b111624200cc37f2fb1a00d"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48provider" title="provider (C++ class) — #include &lt;provider.h&gt;  Public Members    enum sensor_channel *channels      uint32_t channels_N      int (*read_fn)(struct provider*, float*)      void *info"><span class="n"><span class="pre">provider</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">ps</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">CONFIG_MAX_PROVIDER_COUNT</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N15provider_reader2psE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15provider_reader4ps_NE">
+<span id="_CPPv3N15provider_reader4ps_NE"></span><span id="_CPPv2N15provider_reader4ps_NE"></span><span id="provider_reader::ps_N__uint32_t"></span><span class="target" id="structprovider__reader_1a620e1e53778f181fcfab1900738b9ec1"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ps_N</span></span></span><a class="headerlink" href="#_CPPv4N15provider_reader4ps_NE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15provider_reader5dst_NE">
+<span id="_CPPv3N15provider_reader5dst_NE"></span><span id="_CPPv2N15provider_reader5dst_NE"></span><span id="provider_reader::dst_N__uint32_t"></span><span class="target" id="structprovider__reader_1a9aeb0546c240e4ef651fe135cf579b69"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dst_N</span></span></span><a class="headerlink" href="#_CPPv4N15provider_reader5dst_NE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv418provider_hdr_entry">
+<span id="_CPPv318provider_hdr_entry"></span><span id="_CPPv218provider_hdr_entry"></span><span id="provider_hdr_entry"></span><span class="target" id="structprovider__hdr__entry"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">provider_hdr_entry</span></span></span><a class="headerlink" href="#_CPPv418provider_hdr_entry" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;provider.h&gt;</em></div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members<a class="headerlink" href="#breathe-section-title-public-members" title="Permalink to this headline">¶</a></p>
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N18provider_hdr_entry11provider_idE">
+<span id="_CPPv3N18provider_hdr_entry11provider_idE"></span><span id="_CPPv2N18provider_hdr_entry11provider_idE"></span><span id="provider_hdr_entry::provider_id__uint32_t"></span><span class="target" id="structprovider__hdr__entry_1a50574ce3bd08e0278ea137a39c6a3c24"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">provider_id</span></span></span><a class="headerlink" href="#_CPPv4N18provider_hdr_entry11provider_idE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N18provider_hdr_entry4chanE">
+<span id="_CPPv3N18provider_hdr_entry4chanE"></span><span id="_CPPv2N18provider_hdr_entry4chanE"></span><span id="provider_hdr_entry::chan__sensor_channel"></span><span class="target" id="structprovider__hdr__entry_1a9334ce2decf7335ace41bcc2fc56a44d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="n"><span class="pre">sensor_channel</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">chan</span></span></span><a class="headerlink" href="#_CPPv4N18provider_hdr_entry4chanE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<h2 id="anomaly-lib">Anomaly lib<a class="headerlink" href="#anomaly-lib" title="Link to this heading">¶</a></h2>
+<p>Anomaly lib documentation.
+Details on usage are found <a class="reference internal" href="real-time-detection.html"><span class="doc std std-doc">here</span></a>.</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-defines">Defines<a class="headerlink" href="#breathe-section-title-defines" title="Permalink to this headline">¶</a></p>
+<dl class="cpp macro objdesc">
+<dt class="sig sig-object highlight cpp" id="c.DETECTOR_SMOOTHING_NONE">
+<span class="target" id="detector_8h_1aa8ea07154ce6935177b9cc15e48bbffe"></span><span class="sig-name descname"><span class="n"><span class="pre">DETECTOR_SMOOTHING_NONE</span></span></span><a class="headerlink" href="#c.DETECTOR_SMOOTHING_NONE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>No smoothing used for anomaly detection. </p>
+</dd></dl>
+
+<dl class="cpp macro objdesc">
+<dt class="sig sig-object highlight cpp" id="c.DETECTOR_SMOOTHING_EXP_SMOOTHING">
+<span class="target" id="detector_8h_1ac8df041f7c02d332b4c033ebcba9e3a6"></span><span class="sig-name descname"><span class="n"><span class="pre">DETECTOR_SMOOTHING_EXP_SMOOTHING</span></span></span><a class="headerlink" href="#c.DETECTOR_SMOOTHING_EXP_SMOOTHING" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Apply exponential moving average smoothing. Ensure to set the smoothing factor:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">detector_classifier</span><span class="w"> </span><span class="n">dc</span><span class="p">;</span>
+<span class="n">detector_classifier_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dc</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+<span class="n">dc</span><span class="p">.</span><span class="n">exp_moving_avg_opts</span><span class="p">.</span><span class="n">smoothing_factor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.3f</span><span class="p">;</span>
+</code></pre></div>
+</div>
+</dd></dl>
+
+<dl class="cpp macro objdesc">
+<dt class="sig sig-object highlight cpp" id="c.DETECTOR_DEFAULT_OPTS">
+<span class="target" id="detector_8h_1a7218696b38a8eaa7066fa7f777a8607a"></span><span class="sig-name descname"><span class="n"><span class="pre">DETECTOR_DEFAULT_OPTS</span></span></span><a class="headerlink" href="#c.DETECTOR_DEFAULT_OPTS" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs<a class="headerlink" href="#breathe-section-title-typedefs" title="Permalink to this headline">¶</a></p>
+<dl class="cpp type objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv413detector_cb_t">
+<span id="_CPPv313detector_cb_t"></span><span id="_CPPv213detector_cb_t"></span><span id="detector_cb_t"></span><span class="target" id="detector_8h_1ab903e78760564f2025c121661dd56ac3"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">detector_cb_t</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">score</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv413detector_cb_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Callback type when classifier threshold is met.</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv413detector_cb_t-param-ctx">Param ctx<span class="colon">:</span><a class="headerlink" href="#_CPPv413detector_cb_t-param-ctx" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>Opaque context passed by caller. </p>
+</dd>
+<dt class="field-even" id="_CPPv413detector_cb_t-param-score">Param score<span class="colon">:</span><a class="headerlink" href="#_CPPv413detector_cb_t-param-score" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>Logit output of the classifier. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp type objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv423detector_smoothing_cb_t">
+<span id="_CPPv323detector_smoothing_cb_t"></span><span id="_CPPv223detector_smoothing_cb_t"></span><span id="detector_smoothing_cb_t"></span><span class="target" id="detector_8h_1ada5a791f12c1b09618d88c70cb96e53a"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">detector_smoothing_cb_t</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n"><span class="pre">detector_classifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">dc</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">score</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv423detector_smoothing_cb_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Type for the smoothing function. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-enums">Enums<a class="headerlink" href="#breathe-section-title-enums" title="Permalink to this headline">¶</a></p>
+<dl class="cpp enum objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv415detector_status">
+<span id="_CPPv315detector_status"></span><span id="_CPPv215detector_status"></span><span class="target" id="detector_8h_1ab683152d5ecf0f2bb37ce2e08d5b2528"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_status</span></span></span><a class="headerlink" href="#_CPPv415detector_status" title="Link to this definition">¶</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15detector_status18DETECTOR_STATUS_OKE">
+<span id="_CPPv3N15detector_status18DETECTOR_STATUS_OKE"></span><span id="_CPPv2N15detector_status18DETECTOR_STATUS_OKE"></span><span class="target" id="detector_8h_1ab683152d5ecf0f2bb37ce2e08d5b2528af34ebcbb27a894c4457164c93d496235"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DETECTOR_STATUS_OK</span></span></span><a class="headerlink" href="#_CPPv4N15detector_status18DETECTOR_STATUS_OKE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15detector_status21DETECTOR_STATUS_ERRORE">
+<span id="_CPPv3N15detector_status21DETECTOR_STATUS_ERRORE"></span><span id="_CPPv2N15detector_status21DETECTOR_STATUS_ERRORE"></span><span class="target" id="detector_8h_1ab683152d5ecf0f2bb37ce2e08d5b2528aa316ab6cb415b4dd35c8e8058e851943"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DETECTOR_STATUS_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N15detector_status21DETECTOR_STATUS_ERRORE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15detector_status24DETECTOR_STATUS_SIZE_ERRE">
+<span id="_CPPv3N15detector_status24DETECTOR_STATUS_SIZE_ERRE"></span><span id="_CPPv2N15detector_status24DETECTOR_STATUS_SIZE_ERRE"></span><span class="target" id="detector_8h_1ab683152d5ecf0f2bb37ce2e08d5b2528a76251d90e76e13f9c6b51a1a68c04480"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DETECTOR_STATUS_SIZE_ERR</span></span></span><a class="headerlink" href="#_CPPv4N15detector_status24DETECTOR_STATUS_SIZE_ERRE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15detector_status22DETECTOR_STATUS_EINVALE">
+<span id="_CPPv3N15detector_status22DETECTOR_STATUS_EINVALE"></span><span id="_CPPv2N15detector_status22DETECTOR_STATUS_EINVALE"></span><span class="target" id="detector_8h_1ab683152d5ecf0f2bb37ce2e08d5b2528a45bd38083194ff3b38427e00be82af4f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DETECTOR_STATUS_EINVAL</span></span></span><a class="headerlink" href="#_CPPv4N15detector_status22DETECTOR_STATUS_EINVALE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N15detector_status22DETECTOR_STATUS_ERANGEE">
+<span id="_CPPv3N15detector_status22DETECTOR_STATUS_ERANGEE"></span><span id="_CPPv2N15detector_status22DETECTOR_STATUS_ERANGEE"></span><span class="target" id="detector_8h_1ab683152d5ecf0f2bb37ce2e08d5b2528a2a5e2622f829e9a0aaf9d15ec3f5ddf8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DETECTOR_STATUS_ERANGE</span></span></span><a class="headerlink" href="#_CPPv4N15detector_status22DETECTOR_STATUS_ERANGEE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions<a class="headerlink" href="#breathe-section-title-functions" title="Permalink to this headline">¶</a></p>
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv432detector_smoothing_exp_smoothingP19detector_classifierfPv">
+<span id="_CPPv332detector_smoothing_exp_smoothingP19detector_classifierfPv"></span><span id="_CPPv232detector_smoothing_exp_smoothingP19detector_classifierfPv"></span><span id="detector_smoothing_exp_smoothing__detector_classifierP.float.voidP"></span><span class="target" id="detector_8h_1a74fd2d3d30c7a6464bd9609891d7f4c9"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_smoothing_exp_smoothing</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n"><span class="pre">detector_classifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv432detector_smoothing_exp_smoothingP19detector_classifierfPv" title="detector_smoothing_exp_smoothing::dc (C++ function parameter)"><span class="n sig-param"><span class="pre">dc</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv432detector_smoothing_exp_smoothingP19detector_classifierfPv" title="detector_smoothing_exp_smoothing::score (C++ function parameter)"><span class="n sig-param"><span class="pre">score</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv432detector_smoothing_exp_smoothingP19detector_classifierfPv" title="detector_smoothing_exp_smoothing::ctx (C++ function parameter)"><span class="n sig-param"><span class="pre">ctx</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432detector_smoothing_exp_smoothingP19detector_classifierfPv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv415detector_detectPKfPf">
+<span id="_CPPv315detector_detectPKfPf"></span><span id="_CPPv215detector_detectPKfPf"></span><span id="detector_detect__floatCP.floatP"></span><span class="target" id="detector_8h_1a693797f7ea85df4d0503e99081171b67"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_detect</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv415detector_detectPKfPf" title="detector_detect::buffer (C++ function parameter)"><span class="n sig-param"><span class="pre">buffer</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv415detector_detectPKfPf" title="detector_detect::score (C++ function parameter)"><span class="n sig-param"><span class="pre">score</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415detector_detectPKfPf" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Calculates anomaly score of provided data</p>
+<p><code class="docutils literal notranslate"><span class="pre">buffer</span></code> size depends on the detector. <code class="docutils literal notranslate"><span class="pre">score</span></code> is a single float. </p>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv413detector_initv">
+<span id="_CPPv313detector_initv"></span><span id="_CPPv213detector_initv"></span><span id="detector_init"></span><span class="target" id="detector_8h_1a830c9fe2bbcc325536047bd569a39edc"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_init</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413detector_initv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv417detector_get_infoPv">
+<span id="_CPPv317detector_get_infoPv"></span><span id="_CPPv217detector_get_infoPv"></span><span id="detector_get_info__voidP"></span><span class="target" id="detector_8h_1af5ecbd21436a70a776e1cafa905db745"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_get_info</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv417detector_get_infoPv" title="detector_get_info::info (C++ function parameter)"><span class="n sig-param"><span class="pre">info</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417detector_get_infoPv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf">
+<span id="_CPPv324detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf"></span><span id="_CPPv224detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf"></span><span id="detector_classifier_init__detectorP.detector_classifierP.provider_readerP.detector_smoothing_cb_t.int64_t.float"></span><span class="target" id="detector_8h_1aa3442142dc625aeda40e22cfa1dbf9db"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_classifier_init</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48detector" title="detector (C++ class) — #include &lt;detector.h&gt;  Public Members    int32_t (*detect)(struct detector*, const float*, float*)      int32_t (*init)(struct detector*)      int32_t (*get_info)(struct detector*, void**)"><span class="n"><span class="pre">detector</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-d" title="detector_classifier_init::d (C++ function parameter) — Initialized detector"><span class="n sig-param"><span class="pre">d</span></span></a>, </span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n"><span class="pre">detector_classifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-dc" title="detector_classifier_init::dc (C++ function parameter) — Uninitialized detector classifier"><span class="n sig-param"><span class="pre">dc</span></span></a>, </span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv415provider_reader" title="provider_reader (C++ class) — #include &lt;provider.h&gt;  Public Members    struct provider *ps[CONFIG_MAX_PROVIDER_COUNT]      uint32_t ps_N      uint32_t dst_N"><span class="n"><span class="pre">provider_reader</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-pr" title="detector_classifier_init::pr (C++ function parameter) — Pointer to the initialized provider_reader object"><span class="n sig-param"><span class="pre">pr</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="#_CPPv423detector_smoothing_cb_t" title="detector_smoothing_cb_t (C++ type) — Type for the smoothing function."><span class="n"><span class="pre">detector_smoothing_cb_t</span></span></a><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-smoothing" title="detector_classifier_init::smoothing (C++ function parameter) — DETECTOR_SMOOTHING_NONE - no smoothing."><span class="n sig-param"><span class="pre">smoothing</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-processing_delay" title="detector_classifier_init::processing_delay (C++ function parameter) — Cadence for obtaining new values from the detector."><span class="n sig-param"><span class="pre">processing_delay</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-threshold" title="detector_classifier_init::threshold (C++ function parameter) — Probability threshold in (0, 1) to determine whether a score is anomaly or not."><span class="n sig-param"><span class="pre">threshold</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Initialize the detector classifier struct.</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-d"><span class="k">struct</span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48detector" title="detector (C++ class) — #include &lt;detector.h&gt;  Public Members    int32_t (*detect)(struct detector*, const float*, float*)      int32_t (*init)(struct detector*)      int32_t (*get_info)(struct detector*, void**)"><span class="n">detector</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">d</span><a class="headerlink" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-d" title="Permalink to this definition">¶</a></dt><dd><p>Initialized detector </p>
+</dd>
+<dt id="_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-dc"><span class="k">struct</span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n">detector_classifier</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">dc</span><a class="headerlink" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-dc" title="Permalink to this definition">¶</a></dt><dd><p>Uninitialized detector classifier </p>
+</dd>
+<dt id="_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-pr"><span class="k">struct</span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv415provider_reader" title="provider_reader (C++ class) — #include &lt;provider.h&gt;  Public Members    struct provider *ps[CONFIG_MAX_PROVIDER_COUNT]      uint32_t ps_N      uint32_t dst_N"><span class="n">provider_reader</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">pr</span><a class="headerlink" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-pr" title="Permalink to this definition">¶</a></dt><dd><p>Pointer to the initialized provider_reader object </p>
+</dd>
+<dt id="_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-smoothing"><a class="desctype reference internal" href="#_CPPv423detector_smoothing_cb_t" title="detector_smoothing_cb_t (C++ type) — Type for the smoothing function."><span class="n">detector_smoothing_cb_t</span></a><span class="w"> </span><span class="n sig-param sig-name">smoothing</span><a class="headerlink" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-smoothing" title="Permalink to this definition">¶</a></dt><dd><p>Function used for smoothing scores. Possible values are:<ul class="simple">
+<li><p>DETECTOR_SMOOTHING_NONE - no smoothing.</p></li>
+<li><p>DETECTOR_SMOOTHING_EXP_SMOOTHING - exponential smoothing. </p></li>
+</ul>
+</p>
+</dd>
+<dt id="_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-processing_delay"><span class="n">int64_t</span><span class="w"> </span><span class="n sig-param sig-name">processing_delay</span><a class="headerlink" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-processing_delay" title="Permalink to this definition">¶</a></dt><dd><p>Cadence for obtaining new values from the detector. </p>
+</dd>
+<dt id="_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-threshold"><span class="kt">float</span><span class="w"> </span><span class="n sig-param sig-name">threshold</span><a class="headerlink" href="#_CPPv424detector_classifier_initP8detectorP19detector_classifierP15provider_reader23detector_smoothing_cb_t7int64_tf-p-threshold" title="Permalink to this definition">¶</a></dt><dd><p>Probability threshold in (0, 1) to determine whether a score is anomaly or not. </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv425detector_classifier_startP19detector_classifierii">
+<span id="_CPPv325detector_classifier_startP19detector_classifierii"></span><span id="_CPPv225detector_classifier_startP19detector_classifierii"></span><span id="detector_classifier_start__detector_classifierP.i.i"></span><span class="target" id="detector_8h_1a4df8ba0713b78f8903e45ff116912161"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_classifier_start</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n"><span class="pre">detector_classifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv425detector_classifier_startP19detector_classifierii-p-dc" title="detector_classifier_start::dc (C++ function parameter) — Initialized classifier object"><span class="n sig-param"><span class="pre">dc</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv425detector_classifier_startP19detector_classifierii-p-priority" title="detector_classifier_start::priority (C++ function parameter) — Priority given to thread."><span class="n sig-param"><span class="pre">priority</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv425detector_classifier_startP19detector_classifierii-p-thread_opts" title="detector_classifier_start::thread_opts (C++ function parameter) — Pass DETECTOR_DEFAULT_OPTS for the default settings."><span class="n sig-param"><span class="pre">thread_opts</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425detector_classifier_startP19detector_classifierii" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Start the callback handler in the background.</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv425detector_classifier_startP19detector_classifierii-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv425detector_classifier_startP19detector_classifierii-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv425detector_classifier_startP19detector_classifierii-p-dc"><span class="k">struct</span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n">detector_classifier</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">dc</span><a class="headerlink" href="#_CPPv425detector_classifier_startP19detector_classifierii-p-dc" title="Permalink to this definition">¶</a></dt><dd><p>Initialized classifier object </p>
+</dd>
+<dt id="_CPPv425detector_classifier_startP19detector_classifierii-p-priority"><span class="kt">int</span><span class="w"> </span><span class="n sig-param sig-name">priority</span><a class="headerlink" href="#_CPPv425detector_classifier_startP19detector_classifierii-p-priority" title="Permalink to this definition">¶</a></dt><dd><p>Priority given to thread. </p>
+</dd>
+<dt id="_CPPv425detector_classifier_startP19detector_classifierii-p-thread_opts"><span class="kt">int</span><span class="w"> </span><span class="n sig-param sig-name">thread_opts</span><a class="headerlink" href="#_CPPv425detector_classifier_startP19detector_classifierii-p-thread_opts" title="Permalink to this definition">¶</a></dt><dd><p>Pass <code class="docutils literal notranslate"><span class="pre">DETECTOR_DEFAULT_OPTS</span></code> for the default settings. Otherwise, this contains standard Zephyr thread options. </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv426detector_classifier_deinitP19detector_classifier">
+<span id="_CPPv326detector_classifier_deinitP19detector_classifier"></span><span id="_CPPv226detector_classifier_deinitP19detector_classifier"></span><span id="detector_classifier_deinit__detector_classifierP"></span><span class="target" id="detector_8h_1a3446042d2cb5675f6af4ea69f3937e11"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_classifier_deinit</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n"><span class="pre">detector_classifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv426detector_classifier_deinitP19detector_classifier-p-dc" title="detector_classifier_deinit::dc (C++ function parameter) — classifier object"><span class="n sig-param"><span class="pre">dc</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426detector_classifier_deinitP19detector_classifier" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Stop the callback handler and cleanup</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv426detector_classifier_deinitP19detector_classifier-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv426detector_classifier_deinitP19detector_classifier-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv426detector_classifier_deinitP19detector_classifier-p-dc"><span class="k">struct</span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n">detector_classifier</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">dc</span><a class="headerlink" href="#_CPPv426detector_classifier_deinitP19detector_classifier-p-dc" title="Permalink to this definition">¶</a></dt><dd><p>classifier object </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv">
+<span id="_CPPv331detector_classifier_register_cbP19detector_classifier13detector_cb_tPv"></span><span id="_CPPv231detector_classifier_register_cbP19detector_classifier13detector_cb_tPv"></span><span id="detector_classifier_register_cb__detector_classifierP.detector_cb_t.voidP"></span><span class="target" id="detector_8h_1a68ae51a0a6b447e6216079bd2c3d7d13"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_classifier_register_cb</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n"><span class="pre">detector_classifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-dc" title="detector_classifier_register_cb::dc (C++ function parameter) — The detector object."><span class="n sig-param"><span class="pre">dc</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="#_CPPv413detector_cb_t" title="detector_cb_t (C++ type) — Callback type when classifier threshold is met."><span class="n"><span class="pre">detector_cb_t</span></span></a><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-cb" title="detector_classifier_register_cb::cb (C++ function parameter) — Callback function"><span class="n sig-param"><span class="pre">cb</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-ctx" title="detector_classifier_register_cb::ctx (C++ function parameter) — Opaque context passed to this specific callback."><span class="n sig-param"><span class="pre">ctx</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Register a callback that is run when an anomaly is detected.</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-dc"><span class="k">struct</span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n">detector_classifier</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">dc</span><a class="headerlink" href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-dc" title="Permalink to this definition">¶</a></dt><dd><p>The detector object. </p>
+</dd>
+<dt id="_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-cb"><a class="desctype reference internal" href="#_CPPv413detector_cb_t" title="detector_cb_t (C++ type) — Callback type when classifier threshold is met."><span class="n">detector_cb_t</span></a><span class="w"> </span><span class="n sig-param sig-name">cb</span><a class="headerlink" href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-cb" title="Permalink to this definition">¶</a></dt><dd><p>Callback function </p>
+</dd>
+<dt id="_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-ctx"><span class="kt">void</span><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">ctx</span><a class="headerlink" href="#_CPPv431detector_classifier_register_cbP19detector_classifier13detector_cb_tPv-p-ctx" title="Permalink to this definition">¶</a></dt><dd><p>Opaque context passed to this specific callback. </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv433detector_classifier_unregister_cbP19detector_classifier">
+<span id="_CPPv333detector_classifier_unregister_cbP19detector_classifier"></span><span id="_CPPv233detector_classifier_unregister_cbP19detector_classifier"></span><span id="detector_classifier_unregister_cb__detector_classifierP"></span><span class="target" id="detector_8h_1a2462dcdd3ca9cca9399e3d6c6e1cf420"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_classifier_unregister_cb</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n"><span class="pre">detector_classifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv433detector_classifier_unregister_cbP19detector_classifier-p-dc" title="detector_classifier_unregister_cb::dc (C++ function parameter) — The detector object"><span class="n sig-param"><span class="pre">dc</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433detector_classifier_unregister_cbP19detector_classifier" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Unregister all callbacks</p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv433detector_classifier_unregister_cbP19detector_classifier-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv433detector_classifier_unregister_cbP19detector_classifier-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv433detector_classifier_unregister_cbP19detector_classifier-p-dc"><span class="k">struct</span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv419detector_classifier" title="detector_classifier (C++ class) — Callback handler manager for anomaly detection."><span class="n">detector_classifier</span></a><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">dc</span><a class="headerlink" href="#_CPPv433detector_classifier_unregister_cbP19detector_classifier-p-dc" title="Permalink to this definition">¶</a></dt><dd><p>The detector object </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables<a class="headerlink" href="#breathe-section-title-variables" title="Permalink to this headline">¶</a></p>
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv410g_detector">
+<span id="_CPPv310g_detector"></span><span id="_CPPv210g_detector"></span><span id="g_detector__detector"></span><span class="target" id="detector_8h_1a550b401c7163bd56e55da3baf5ee1891"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48detector" title="detector (C++ class) — #include &lt;detector.h&gt;  Public Members    int32_t (*detect)(struct detector*, const float*, float*)      int32_t (*init)(struct detector*)      int32_t (*get_info)(struct detector*, void**)"><span class="n"><span class="pre">detector</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g_detector</span></span></span><a class="headerlink" href="#_CPPv410g_detector" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="cpp struct objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv48detector">
+<span id="_CPPv38detector"></span><span id="_CPPv28detector"></span><span id="detector"></span><span class="target" id="structdetector"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector</span></span></span><a class="headerlink" href="#_CPPv48detector" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;detector.h&gt;</em></div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members<a class="headerlink" href="#breathe-section-title-public-members" title="Permalink to this headline">¶</a></p>
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N8detector6detectE">
+<span id="_CPPv3N8detector6detectE"></span><span id="_CPPv2N8detector6detectE"></span><span class="target" id="structdetector_1aec9b7198ba3dbcd68a705d462e88e6aa"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">detect</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48detector" title="detector (C++ class) — #include &lt;detector.h&gt;  Public Members    int32_t (*detect)(struct detector*, const float*, float*)      int32_t (*init)(struct detector*)      int32_t (*get_info)(struct detector*, void**)"><span class="n"><span class="pre">detector</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv4N8detector6detectE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N8detector4initE">
+<span id="_CPPv3N8detector4initE"></span><span id="_CPPv2N8detector4initE"></span><span class="target" id="structdetector_1a9c5378bedca0f027e91c18f6931a4c80"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">init</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48detector" title="detector (C++ class) — #include &lt;detector.h&gt;  Public Members    int32_t (*detect)(struct detector*, const float*, float*)      int32_t (*init)(struct detector*)      int32_t (*get_info)(struct detector*, void**)"><span class="n"><span class="pre">detector</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv4N8detector4initE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N8detector8get_infoE">
+<span id="_CPPv3N8detector8get_infoE"></span><span id="_CPPv2N8detector8get_infoE"></span><span class="target" id="structdetector_1a98027d83b853d196a3b4aa1a05ad7d8c"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_info</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv48detector" title="detector (C++ class) — #include &lt;detector.h&gt;  Public Members    int32_t (*detect)(struct detector*, const float*, float*)      int32_t (*init)(struct detector*)      int32_t (*get_info)(struct detector*, void**)"><span class="n"><span class="pre">detector</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv4N8detector8get_infoE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv431detector_smoothing_opts_exp_mav">
+<span id="_CPPv331detector_smoothing_opts_exp_mav"></span><span id="_CPPv231detector_smoothing_opts_exp_mav"></span><span id="detector_smoothing_opts_exp_mav"></span><span class="target" id="structdetector__smoothing__opts__exp__mav"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_smoothing_opts_exp_mav</span></span></span><a class="headerlink" href="#_CPPv431detector_smoothing_opts_exp_mav" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;detector.h&gt;</em></div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members<a class="headerlink" href="#breathe-section-title-public-members" title="Permalink to this headline">¶</a></p>
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N31detector_smoothing_opts_exp_mav16smoothing_factorE">
+<span id="_CPPv3N31detector_smoothing_opts_exp_mav16smoothing_factorE"></span><span id="_CPPv2N31detector_smoothing_opts_exp_mav16smoothing_factorE"></span><span id="detector_smoothing_opts_exp_mav::smoothing_factor__float"></span><span class="target" id="structdetector__smoothing__opts__exp__mav_1ace3f6984345166ecf70e619cafe5093b"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">smoothing_factor</span></span></span><a class="headerlink" href="#_CPPv4N31detector_smoothing_opts_exp_mav16smoothing_factorE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Value between 0 and 1. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv419detector_classifier">
+<span id="_CPPv319detector_classifier"></span><span id="_CPPv219detector_classifier"></span><span id="detector_classifier"></span><span class="target" id="structdetector__classifier"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">detector_classifier</span></span></span><a class="headerlink" href="#_CPPv419detector_classifier" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;detector.h&gt;</em></div>
+<p>Callback handler manager for anomaly detection. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members<a class="headerlink" href="#breathe-section-title-public-members" title="Permalink to this headline">¶</a></p>
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier8detectorE">
+<span id="_CPPv3N19detector_classifier8detectorE"></span><span id="_CPPv2N19detector_classifier8detectorE"></span><span id="detector_classifier::detector__detectorP"></span><span class="target" id="structdetector__classifier_1ad328af215f44eba389cbb754382f99be"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N19detector_classifier8detectorE" title="detector_classifier::detector (C++ member) — Detector object for this specific classifier"><span class="n"><span class="pre">detector</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">detector</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier8detectorE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Detector object for this specific classifier </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier9thresholdE">
+<span id="_CPPv3N19detector_classifier9thresholdE"></span><span id="_CPPv2N19detector_classifier9thresholdE"></span><span id="detector_classifier::threshold__float"></span><span class="target" id="structdetector__classifier_1a4c6c45df9117edf6737b472ff803fe22"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">threshold</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier9thresholdE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Threshold for the anomaly detection </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier10process_msE">
+<span id="_CPPv3N19detector_classifier10process_msE"></span><span id="_CPPv2N19detector_classifier10process_msE"></span><span id="detector_classifier::process_ms__int64_t"></span><span class="target" id="structdetector__classifier_1a3f07996b603cecdcb514346fbffe11fb"></span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">process_ms</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier10process_msE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Expected processing time </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier7num_cbsE">
+<span id="_CPPv3N19detector_classifier7num_cbsE"></span><span id="_CPPv2N19detector_classifier7num_cbsE"></span><span id="detector_classifier::num_cbs__s"></span><span class="target" id="structdetector__classifier_1ae57dfaa2508876d79534c46f9342bff1"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_cbs</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier7num_cbsE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Number of registered callbacks </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier7cb_ctxsE">
+<span id="_CPPv3N19detector_classifier7cb_ctxsE"></span><span id="_CPPv2N19detector_classifier7cb_ctxsE"></span><span id="detector_classifier::cb_ctxs__voidPA"></span><span class="target" id="structdetector__classifier_1a2feba2e84d767ae82041223c4385f0ad"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">cb_ctxs</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19detector_classifier7cb_ctxsE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier9smoothingE">
+<span id="_CPPv3N19detector_classifier9smoothingE"></span><span id="_CPPv2N19detector_classifier9smoothingE"></span><span id="detector_classifier::smoothing__detector_smoothing_cb_t"></span><span class="target" id="structdetector__classifier_1a7dca438b3ce32b0becebb423781ebec6"></span><a class="desctype reference internal" href="#_CPPv423detector_smoothing_cb_t" title="detector_smoothing_cb_t (C++ type) — Type for the smoothing function."><span class="n"><span class="pre">detector_smoothing_cb_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">smoothing</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier9smoothingE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Smoothing function </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier23smoothed_moving_averageE">
+<span id="_CPPv3N19detector_classifier23smoothed_moving_averageE"></span><span id="_CPPv2N19detector_classifier23smoothed_moving_averageE"></span><span id="detector_classifier::smoothed_moving_average__float"></span><span class="target" id="structdetector__classifier_1a9185073d523625a073d78bb37bc5c1fc"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">smoothed_moving_average</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier23smoothed_moving_averageE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Current value of the moving average </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier17smoothing_startedE">
+<span id="_CPPv3N19detector_classifier17smoothing_startedE"></span><span id="_CPPv2N19detector_classifier17smoothing_startedE"></span><span id="detector_classifier::smoothing_started__b"></span><span class="target" id="structdetector__classifier_1ab8f89756679b76ee3c2c3a507c1fba12"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">smoothing_started</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier17smoothing_startedE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Indicator whether smoothing started. Used to prevent initializing <code class="docutils literal notranslate"><span class="pre">smoothing_score</span></code> to some absurd number such as 0 or NaN. </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier19exp_moving_avg_optsE">
+<span id="_CPPv3N19detector_classifier19exp_moving_avg_optsE"></span><span id="_CPPv2N19detector_classifier19exp_moving_avg_optsE"></span><span id="detector_classifier::exp_moving_avg_opts__detector_smoothing_opts_exp_mav"></span><span class="target" id="structdetector__classifier_1abac821c40b7c49054b0365b8b526abde"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv431detector_smoothing_opts_exp_mav" title="detector_smoothing_opts_exp_mav (C++ class) — Value between 0 and 1."><span class="n"><span class="pre">detector_smoothing_opts_exp_mav</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exp_moving_avg_opts</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier19exp_moving_avg_optsE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Options when <code class="docutils literal notranslate"><span class="pre">DETECTOR_SMOOTHING_EXP_SMOOTHING</span></code> is used </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp">
+<span class="target" id="structdetector__classifier_1aade20bf600f34a7f540e2b1dbc4c09db"></span><span class="sig-name descname"><span class="pre">union</span> <span class="pre">detector_classifier</span></span></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members<a class="headerlink" href="#breathe-section-title-private-members" title="Permalink to this headline">¶</a></p>
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier2prE">
+<span id="_CPPv3N19detector_classifier2prE"></span><span id="_CPPv2N19detector_classifier2prE"></span><span id="detector_classifier::pr__provider_readerP"></span><span class="target" id="structdetector__classifier_1aa4bdb545797d58c004cb30d18325719f"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv415provider_reader" title="provider_reader (C++ class) — #include &lt;provider.h&gt;  Public Members    struct provider *ps[CONFIG_MAX_PROVIDER_COUNT]      uint32_t ps_N      uint32_t dst_N"><span class="n"><span class="pre">provider_reader</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pr</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier2prE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Provider reader object </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier14deinit_startedE">
+<span id="_CPPv3N19detector_classifier14deinit_startedE"></span><span id="_CPPv2N19detector_classifier14deinit_startedE"></span><span id="detector_classifier::deinit_started__atomic_t"></span><span class="target" id="structdetector__classifier_1aba0442e077361e3f9a677b62527978cd"></span><span class="n"><span class="pre">atomic_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deinit_started</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier14deinit_startedE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>started deinitialization process </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier2wqE">
+<span id="_CPPv3N19detector_classifier2wqE"></span><span id="_CPPv2N19detector_classifier2wqE"></span><span id="detector_classifier::wq__k_work_q"></span><span class="target" id="structdetector__classifier_1a4b54721e16313d01ec5581e87b52191c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">k_work_q</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wq</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier2wqE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>internal work queue </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier6bufferE">
+<span id="_CPPv3N19detector_classifier6bufferE"></span><span id="_CPPv2N19detector_classifier6bufferE"></span><span id="detector_classifier::buffer__floatA"></span><span class="target" id="structdetector__classifier_1ae8a93f282c759f6984daeebc117ee9c6"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buffer</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">128</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19detector_classifier6bufferE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>internal buffer for the provider </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier3hdrE">
+<span id="_CPPv3N19detector_classifier3hdrE"></span><span id="_CPPv2N19detector_classifier3hdrE"></span><span id="detector_classifier::hdr__provider_hdr_entryA"></span><span class="target" id="structdetector__classifier_1af3bb82099e436d3dc82211279e320fbf"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv418provider_hdr_entry" title="provider_hdr_entry (C++ class) — #include &lt;provider.h&gt;  Public Members    uint32_t provider_id      enum sensor_channel chan"><span class="n"><span class="pre">provider_hdr_entry</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hdr</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">128</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19detector_classifier3hdrE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>internal header buffer </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier11thread_dataE">
+<span id="_CPPv3N19detector_classifier11thread_dataE"></span><span id="_CPPv2N19detector_classifier11thread_dataE"></span><span id="detector_classifier::thread_data__k_thread"></span><span class="target" id="structdetector__classifier_1a00d32824a3116e50121d0acd9849da33"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">k_thread</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thread_data</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier11thread_dataE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>thread data </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N19detector_classifier3tidE">
+<span id="_CPPv3N19detector_classifier3tidE"></span><span id="_CPPv2N19detector_classifier3tidE"></span><span id="detector_classifier::tid__k_tid_t"></span><span class="target" id="structdetector__classifier_1ab90b8fbe28f4906152ff284cc05e5771"></span><span class="n"><span class="pre">k_tid_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tid</span></span></span><a class="headerlink" href="#_CPPv4N19detector_classifier3tidE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>thread ID </p>
+</dd></dl>
+
+<dl class="cpp var objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4N19detector_classifier8cb_hdlrsE">
+<span id="_CPPv3N19detector_classifier8cb_hdlrsE"></span><span id="_CPPv2N19detector_classifier8cb_hdlrsE"></span><span id="detector_classifier::cb_hdlrs__detector_cb_tA"></span><span class="target" id="structdetector__classifier_1a47903a76b176a04baeb02efc20e11980"></span><a class="desctype reference internal" href="#_CPPv413detector_cb_t" title="detector_cb_t (C++ type) — Callback type when classifier threshold is met."><span class="n"><span class="pre">detector_cb_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cb_hdlrs</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">CONFIG_ANOMALY_LIB_DETECTION_CALLBACKS_MAX_CB_HDLRS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19detector_classifier8cb_hdlrsE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Struct containing the registered callbacks </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      2026-05-21
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="real-time-detection.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Real-time Anomaly Detection" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Real-time Anomaly Detection
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="sample-kenning-evaluation-report.html" class="md-footer__link md-footer__link--next" aria-label="Next: Sample real-time anomaly detection evaluation report" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Sample real-time anomaly detection evaluation report
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        Copyright &#169; 2025-2026, Antmicro.
+        
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/antmicro" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/antmicro" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["toc.integrate"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+      
+        <script src="_static/sphinx_immaterial_theme.f9d9eeeb247ace16c.min.js?v=8ec58cb5"></script>
+    
+  </body>
+</html>
